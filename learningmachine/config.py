@@ -63,7 +63,7 @@ if len(packages_to_install) > 0:
 
 if len(packages_to_install) > 0:
     try:
-        print("INSTALLING AS USUAL...")   
+        print("\n\nINSTALLING AS USUAL...")   
         if len(packages_to_install) > 0:     
             utils.install_packages(
                     StrVector(packages_to_install),
@@ -71,7 +71,7 @@ if len(packages_to_install) > 0:
                 )
     except Exception as e1:
         try:  
-            print("INSTALLING in '.' ...")
+            print("\n\nINSTALLING in '.' ...")
             if len(packages_to_install) > 0:
                 utils.install_packages(
                     StrVector(packages_to_install),
@@ -80,11 +80,11 @@ if len(packages_to_install) > 0:
                 )
         except Exception as e2: 
             try:  
-                print("INSTALLING FROM COMMAND LINE...")
+                print("\n\nINSTALLING FROM COMMAND LINE...")
                 for pkg in packages_to_install:
                     subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'))"])
             except Exception as e3:
-                print("INSTALLING FROM COMMAND LINE in '.' ...")
+                print("\n\nINSTALLING FROM COMMAND LINE in '.' ...")
                 for pkg in packages_to_install:
                     subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'), lib='.')"])
         
@@ -92,10 +92,10 @@ FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
 STRVECTOR = StrVector
 try: 
-    print("IMPORTING IN PYTHON AS USUAL...")
+    print("\n\nIMPORTING IN PYTHON AS USUAL...")
     LEARNINGMACHINE_PACKAGE = importr("learningmachine")
 except Exception as e:
-    print("IMPORTING IN PYTHON FROM '.' ...")
+    print("\n\nIMPORTING IN PYTHON FROM '.' ...")
     LEARNINGMACHINE_PACKAGE = importr("learningmachine", lib_loc=".")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
