@@ -41,7 +41,7 @@ def _none2null(none_obj):
 none_converter = cv.Converter("None converter")
 none_converter.py2rpy.register(type(None), _none2null)
 
-required_packages = ["learningmachine", "bcn", "Rcpp", "R6", "dfoptim"]  # list of required R packages
+required_packages = ["Rcpp", "R6", "dfoptim", "bcn", "learningmachine"]  # list of required R packages
 
 packages_to_install = [
     x for x in required_packages if not rpackages.isinstalled(x)
