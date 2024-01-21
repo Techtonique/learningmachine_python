@@ -1,37 +1,49 @@
-name: Publish Python 🐍 distribution 📦 to PyPI
+name: Python and R Tests
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main  # Replace with your branch name
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  publish:
+  test:
     runs-on: ubuntu-latest
 
+    services:
+      r:
+        image: rocker/r-ver:4.1.2
+        ports:
+          - 6311:6311
+        options: --name=r-service
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'  # Replace with your Python version
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel setuptools twine
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install .
 
-      - name: Build distribution
-        run: python setup.py sdist bdist_wheel
+    - name: Install R Dependencies
+      run: |
+        Rscript -e 'install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
+        Rscript -e 'install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
+        Rscript -e 'install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
 
-      - name: Run examples 
-        run: python -m pip install .&&find examples -maxdepth 2 -name "*.py" -exec  python3 {} \;
+    - name: Run Python Examples from Subdirectory
+      run: |
+        find examples -maxdepth 2 -name "*.py" -exec  python {} \;
 
-      #- name: Publish to PyPI                
-      #  uses: pypa/gh-action-pypi-publish@release/v1
-      #  with:
-      #    password: ${{ secrets.PYPI_GLOBAL }}
-      #    repository-url: https://upload.pypi.org/legacy/
+    - name: Cleanup
+      run: |
+        sudo killall -9 Rserve
