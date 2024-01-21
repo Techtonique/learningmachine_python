@@ -67,9 +67,9 @@ class BaseClassifier(BaseEstimator, ClassifierMixin):
                 r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
             except Exception as e2:
                 try: 
-                    subprocess.run(['Rscript', '-e', "utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
+                    subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
                 except Exception as e3:
-                    subprocess.run(['Rscript', '-e', "utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
+                    subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
 
         self.obj = r("library(learningmachine); learningmachine::BaseClassifier$new()")
 
