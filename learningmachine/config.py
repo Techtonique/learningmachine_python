@@ -52,17 +52,21 @@ utils = importr("utils")
 graphics = importr("graphics")
 
 print(f" required_packages: {required_packages} \n")
-# print(f" packages_to_install: {packages_to_install} \n")
-# print(f" len(packages_to_install): {len(packages_to_install)} \n")
 
 if len(packages_to_install) > 0:
-    subprocess.check_call(
-        [
-            "Rscript",
-            "-e",
-            f'install.packages({", ".join([f"{x}" for x in packages_to_install])}, repos = "https://techtonique.r-universe.dev", dependencies = TRUE)',
-        ]
-    )
+    try:
+        utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True)
+    except Exception as e1:
+        try:  
+            utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True, lib=".")
+        except Exception as e2: 
+            try:  
+                for pkg in packages_to_install:
+                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev')"])
+            except Exception as e3:
+                for pkg in packages_to_install:
+                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev', lib='.')"])
+        
 
 # check R version
 print(f" R version of 'learningmachine' installed: {utils.packageVersion('learningmachine')}")
