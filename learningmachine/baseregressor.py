@@ -10,15 +10,16 @@ from .config import (
 
 from rpy2.robjects.packages import importr
 from rpy2.robjects import conversion, default_converter, pandas2ri, r
+from sklearn.base import BaseEstimator, RegressorMixin
 
 base = importr("base")
 stats = importr("stats")
 
-def BaseRegressor():
-    """Base Regressor."""
+class BaseRegressor(BaseEstimator, RegressorMixin):
+    """
+        Base Regressor.
+    """
 
-    res = LEARNINGMACHINE_PACKAGE.BaseRegressor()
-
-    # convert R object to pandas dataframe
-    return res
+    def __init__(self,):
+        self = LEARNINGMACHINE_PACKAGE.BaseRegressor        
  
