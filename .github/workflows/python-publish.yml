@@ -38,8 +38,7 @@ jobs:
         Rscript -e 'try(install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
 
     - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
+      run: |        
         pip install -r requirements.txt
         pip install .
       
