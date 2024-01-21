@@ -82,11 +82,11 @@ if len(packages_to_install) > 0:
             try:  
                 print("\n\nINSTALLING FROM COMMAND LINE...")
                 for pkg in packages_to_install:
-                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'))"])
+                    subprocess.run(['Rscript ', '-e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'))"])
             except Exception as e3:
                 print("\n\nINSTALLING FROM COMMAND LINE in '.' ...")
                 for pkg in packages_to_install:
-                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'), lib='.')"])
+                    subprocess.run(['Rscript ', '-e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'), lib='.')"])
         
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
