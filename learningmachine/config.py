@@ -55,25 +55,12 @@ print(f" required_packages: {required_packages} \n")
 # print(f" len(packages_to_install): {len(packages_to_install)} \n")
 
 if len(packages_to_install) > 0:
-    base.options(
-        repos=base.c(
-            techtonique="https://techtonique.r-universe.dev",
-            CRAN="https://cloud.r-project.org",
-        )
-    )
-
-    try: 
-        utils.install_packages(
-            StrVector(packages_to_install)
-        , dependencies = True) 
-    except Exception as e:
-        utils.install_packages(
-            StrVector(packages_to_install)
-        , dependencies = True, lib='.')
-
+    r["options(repos=base.c(techtonique='https://techtonique.r-universe.dev', CRAN='https://cloud.r-project.org'))"]
+    r["try_lm_install <- utils.install_packages('learningmachine')"]
+    r["if inherits(try_lm_install, 'try-error') <- utils.install_packages('learningmachine', lib='.')"]
 
 # check R version
-print(f" R version of 'learningmachine': {utils.packageVersion('learningmachine')}")
+print(f" R version of 'learningmachine' installed: {utils.packageVersion('learningmachine')}")
 
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
