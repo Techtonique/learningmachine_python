@@ -28,7 +28,7 @@ This Python class is based on R package 'learningmachine' (https://techtonique.g
 You need to install R (https://www.r-project.org/) and rpy2 (https://pypi.org/project/rpy2/).
 
 Then, install R package 'learningmachine' (if necessary): 
->> RScript -e 'install.packages("learningmachine", repos = https://techtonique.r-universe.dev)'    
+>> Rscript -e 'install.packages("learningmachine", repos = https://techtonique.r-universe.dev)'    
 """
 
 r["options"](warn=-1)
@@ -58,7 +58,7 @@ print(f" required_packages: {required_packages} \n")
 if len(packages_to_install) > 0:
     subprocess.check_call(
         [
-            "RScript",
+            "Rscript",
             "-e",
             f'install.packages({", ".join([f"{x}" for x in packages_to_install])}, repos = "https://techtonique.r-universe.dev", dependencies = TRUE)',
         ]
