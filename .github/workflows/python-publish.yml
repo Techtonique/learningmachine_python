@@ -39,8 +39,8 @@ jobs:
 
     - name: Install Python Dependencies
       run: |        
-        pip install -r requirements.txt
-        pip install .
+        python3 -m pip3 install -r requirements.txt
+        python3 -m pip3 install .
       
     - name: Run Python Examples from Subdirectory
       run: |
