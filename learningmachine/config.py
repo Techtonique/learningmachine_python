@@ -1,3 +1,9 @@
+# DO NOT PLACE THIS FILE IN THE SAME DIRECTORY AS THE LEARNINGMACHINE CLASS
+# DO NOT PLACE THIS FILE IN THE SAME DIRECTORY AS THE LEARNINGMACHINE CLASS
+# DO NOT PLACE THIS FILE IN THE SAME DIRECTORY AS THE LEARNINGMACHINE CLASS
+# DO NOT PLACE THIS FILE IN THE SAME DIRECTORY AS THE LEARNINGMACHINE CLASS
+# DO NOT PLACE THIS FILE IN THE SAME DIRECTORY AS THE LEARNINGMACHINE CLASS
+
 import pickle
 import subprocess
 from rpy2.robjects import r
@@ -10,7 +16,7 @@ RPY2_ERROR_MESSAGE = ""
 try:
     import rpy2.robjects.packages as rpackages
     from rpy2.robjects.packages import importr
-    from rpy2.robjects.vectors import FloatMatrix, FloatVector, StrVector
+    from rpy2.robjects.vectors import FloatMatrix, FloatVector, IntVector, StrVector, FactorVector
     from rpy2 import rinterface, robjects
     from rpy2.robjects import r, default_converter, NULL
     from rpy2.rinterface import RRuntimeWarning
@@ -83,10 +89,13 @@ if len(packages_to_install) > 0:
                 print("\n\nINSTALLING FROM COMMAND LINE in '.' ... ------------------")
                 for pkg in packages_to_install:
                     subprocess.run("sudo Rscript -e utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'), lib='.')")
-        
+
+FACTORVECTOR = FactorVector        
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
+INTVECTOR = IntVector
 STRVECTOR = StrVector
+
 try: 
     print("\n\nIMPORTING IN PYTHON AS USUAL... ------------------")
     LEARNINGMACHINE_PACKAGE = importr("learningmachine")

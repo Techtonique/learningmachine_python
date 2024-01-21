@@ -4,6 +4,6 @@ __author__ = """T. Moudiki"""
 __email__ = 'thierry.moudiki@gmail.com'
 __version__ = '0.2.0'
 
-from .baseregressor import BaseRegressor
+from .base import BaseClassifier, BaseRegressor
 
-__all__ = ['BaseRegressor']
+__all__ = ['BaseClassifier', 'BaseRegressor']
