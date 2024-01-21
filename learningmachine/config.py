@@ -41,7 +41,7 @@ def _none2null(none_obj):
 none_converter = cv.Converter("None converter")
 none_converter.py2rpy.register(type(None), _none2null)
 
-required_packages = ["learningmachine", "bcn"]  # list of required R packages
+required_packages = ["learningmachine", "bcn", "Rcpp", "R6", "dfoptim"]  # list of required R packages
 
 packages_to_install = [
     x for x in required_packages if not rpackages.isinstalled(x)
@@ -54,22 +54,39 @@ graphics = importr("graphics")
 print(f" required_packages: {required_packages} \n")
 
 if len(packages_to_install) > 0:
+    base.options(
+        repos=base.c(
+            techtonique="https://techtonique.r-universe.dev",
+            CRAN="https://cloud.r-project.org",
+        )
+    )
+
+if len(packages_to_install) > 0:
     try:
-        print("INSTALLING AS USUAL...")
-        utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True)
+        print("INSTALLING AS USUAL...")   
+        if len(packages_to_install) > 0:     
+            utils.install_packages(
+                    StrVector(packages_to_install),
+                    dependencies=True,
+                )
     except Exception as e1:
         try:  
             print("INSTALLING in '.' ...")
-            utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True, lib=".")
+            if len(packages_to_install) > 0:
+                utils.install_packages(
+                    StrVector(packages_to_install),
+                    dependencies=True,
+                    lib_loc=".",
+                )
         except Exception as e2: 
             try:  
                 print("INSTALLING FROM COMMAND LINE...")
                 for pkg in packages_to_install:
-                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev')"])
+                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'))"])
             except Exception as e3:
                 print("INSTALLING FROM COMMAND LINE in '.' ...")
                 for pkg in packages_to_install:
-                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev', lib='.')"])
+                    subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos=c('https://cloud.r-project.org', 'https://techtonique.r-universe.dev'), lib='.')"])
         
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
