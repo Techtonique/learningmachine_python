@@ -17,15 +17,15 @@ class BaseRegressor(BaseEstimator, RegressorMixin):
             Initialize the model.
         """
         try: 
-            r("utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))")
+            r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))")
         except Exception as e1:
             try: 
-                r("utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
+                r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
             except Exception as e2:
                 try: 
-                    subprocess.run(['Rscript', '-e', "utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
+                    subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
                 except Exception as e3:
-                    subprocess.run(['Rscript', '-e', "utils.install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
+                    subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
 
         self.obj = r("library(learningmachine); learningmachine::BaseRegressor$new()")
 
