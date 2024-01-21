@@ -77,7 +77,7 @@ STRVECTOR = StrVector
 try: 
     LEARNINGMACHINE_PACKAGE = importr("learningmachine")
 except Exception as e:
-    LEARNINGMACHINE_PACKAGE = importr("learningmachine", lib=".")
+    LEARNINGMACHINE_PACKAGE = importr("learningmachine", lib_loc=".")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
 NONE_CONVERTER = none_converter
