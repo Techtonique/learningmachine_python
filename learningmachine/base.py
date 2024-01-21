@@ -1,17 +1,6 @@
-import numpy as np
-import pandas as pd
-from .config import (
-    LEARNINGMACHINE_PACKAGE,
-    FLOATMATRIX,
-    FLOATVECTOR,
-    INTVECTOR,
-    FACTORVECTOR,
-    STRVECTOR,
-    R_NULL,
-)
-
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
+from rpy2.robjects.vectors import FloatMatrix, FloatVector, IntVector, FactorVector
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
 
 base = importr("base")
@@ -26,27 +15,24 @@ class BaseRegressor(BaseEstimator, RegressorMixin):
         """
             Initialize the model.
         """
-        self.obj = r('''
-                 library(learningmachine)
-                 learningmachine::BaseRegressor$new()
-                 ''')
+        self.obj = r("require(learningmachine); learningmachine::BaseRegressor$new()")
 
     def fit(self, X, y):
         """
             Fit the model according to the given training data.
         """    
-        X_ = r.matrix(FLOATVECTOR(X), 
+        X_ = r.matrix(FloatVector(X), 
                   byrow = True, 
                   nrow = X.shape[0], 
                   ncol = X.shape[1]) 
-        self.obj["fit"](X_, FLOATVECTOR(y))        
+        self.obj["fit"](X_, FloatVector(y))        
         return self
     
     def predict(self, X):
         """
             Predict using the model.
         """        
-        X_ = r.matrix(FLOATMATRIX(X), 
+        X_ = r.matrix(FloatMatrix(X), 
                   byrow = True, 
                   nrow = X.shape[0], 
                   ncol = X.shape[1]) 
@@ -62,20 +48,17 @@ class BaseClassifier(BaseEstimator, ClassifierMixin):
         """
             Initialize the model.
         """
-        self.obj = r('''
-                 library(learningmachine)
-                 learningmachine::BaseClassifier$new()
-                 ''')
+        self.obj = r("require(learningmachine); learningmachine::BaseClassifier$new()")
 
     def fit(self, X, y):
         """
             Fit the model according to the given training data.
         """    
-        X_ = r.matrix(FLOATVECTOR(X), 
+        X_ = r.matrix(FloatMatrix(X), 
                   byrow = True, 
                   nrow = X.shape[0], 
                   ncol = X.shape[1])         
-        y_ = base.as_factor(INTVECTOR(y))
+        y_ = base.as_factor(IntVector(y))
         self.obj["fit"](X_, y_)        
         return self
     
@@ -83,7 +66,7 @@ class BaseClassifier(BaseEstimator, ClassifierMixin):
         """
             Predict classes using the model.
         """        
-        X_ = r.matrix(FLOATMATRIX(X), 
+        X_ = r.matrix(FloatMatrix(X), 
                   byrow = True, 
                   nrow = X.shape[0], 
                   ncol = X.shape[1]) 
@@ -93,7 +76,7 @@ class BaseClassifier(BaseEstimator, ClassifierMixin):
         """
             Predict probabilities using the model.
         """        
-        X_ = r.matrix(FLOATMATRIX(X), 
+        X_ = r.matrix(FloatMatrix(X), 
                   byrow = True, 
                   nrow = X.shape[0], 
                   ncol = X.shape[1]) 
