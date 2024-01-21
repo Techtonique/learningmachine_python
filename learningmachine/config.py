@@ -54,20 +54,14 @@ graphics = importr("graphics")
 print(f" required_packages: {required_packages} \n")
 
 if len(packages_to_install) > 0:
-    base.options(
-        repos=base.c(
-            techtonique="https://techtonique.r-universe.dev",
-            CRAN="https://cloud.r-project.org",
-        )
-    )
-
-if len(packages_to_install) > 0:
     try:
         print("\n\nINSTALLING AS USUAL...")   
         if len(packages_to_install) > 0:     
             utils.install_packages(
                     StrVector(packages_to_install),
                     dependencies=True,
+                    repos=['https://cloud.r-project.org', 
+                           'https://techtonique.r-universe.dev']
                 )
     except Exception as e1:
         try:  
@@ -77,6 +71,8 @@ if len(packages_to_install) > 0:
                     StrVector(packages_to_install),
                     dependencies=True,
                     lib_loc=".",
+                    repos=['https://cloud.r-project.org', 
+                           'https://techtonique.r-universe.dev']
                 )
         except Exception as e2:             
             try:  
