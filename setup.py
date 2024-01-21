@@ -12,7 +12,8 @@ if not check_r_installed():
 else:
     print("No R installation needed.")
 
-subprocess.run(['pip', 'install', 'rpy2>=3.4.5'])
+subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
+subprocess.run(['python', '-m', 'pip', 'install', 'rpy2>=3.4.5'])
 
 from rpy2.robjects import r
 

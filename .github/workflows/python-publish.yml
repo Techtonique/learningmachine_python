@@ -30,6 +30,9 @@ jobs:
     
     - name: Install R Dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y r-base
+        sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
         Rscript -e 'try(install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
         Rscript -e 'try(install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
         Rscript -e 'try(install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
@@ -39,12 +42,18 @@ jobs:
 
     - name: Install Python Dependencies
       run: | 
-        python --version
         python -m pip install --upgrade pip       
         python -m pip list
+        python -m pip install rpy2
         python -m pip install -r requirements.txt
         python -m pip install .
-      
+
+    - name: Debug Info
+      run: |
+        python --version
+        python -m pip list
+        Rscript --version
+    
     - name: Run Python Examples from Subdirectory
       run: |
         find examples -maxdepth 2 -name "*.py" -exec  python {} \;
