@@ -27,19 +27,19 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-
-    - name: Install Python Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install .
-
+    
     - name: Install R Dependencies
       run: |
         Rscript -e 'install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
         Rscript -e 'install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
         Rscript -e 'install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
 
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install .
+      
     - name: Run Python Examples from Subdirectory
       run: |
         find examples -maxdepth 2 -name "*.py" -exec  python {} \;
