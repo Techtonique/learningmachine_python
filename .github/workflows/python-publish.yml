@@ -30,9 +30,12 @@ jobs:
     
     - name: Install R Dependencies
       run: |
-        Rscript -e 'install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
-        Rscript -e 'install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
-        Rscript -e 'install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"))'
+        Rscript -e 'try(install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
+        Rscript -e 'try(install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
+        Rscript -e 'try(install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
+        Rscript -e 'try(install.packages(c("R6"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
+        Rscript -e 'try(install.packages(c("Rcpp"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
+        Rscript -e 'try(install.packages(c("learningmachine"), repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
 
     - name: Install Python Dependencies
       run: |
