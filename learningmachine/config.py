@@ -61,9 +61,16 @@ if len(packages_to_install) > 0:
             CRAN="https://cloud.r-project.org",
         )
     )
-    utils.install_packages(
-        StrVector(packages_to_install)
-    , dependencies = True)  # dependencies of dependencies nightmare...
+
+    try: 
+        utils.install_packages(
+            StrVector(packages_to_install)
+        , dependencies = True) 
+    except Exception as e:
+        utils.install_packages(
+            StrVector(packages_to_install)
+        , dependencies = True, lib='.')
+
 
 # check R version
 print(f" R version of 'learningmachine': {utils.packageVersion('learningmachine')}")
