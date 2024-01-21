@@ -74,7 +74,10 @@ print(f" R version of 'learningmachine' installed: {utils.packageVersion('learni
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
 STRVECTOR = StrVector
-LEARNINGMACHINE_PACKAGE = importr("learningmachine")
+try: 
+    LEARNINGMACHINE_PACKAGE = importr("learningmachine")
+except Exception as e:
+    LEARNINGMACHINE_PACKAGE = importr("learningmachine", lib=".")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
 NONE_CONVERTER = none_converter
