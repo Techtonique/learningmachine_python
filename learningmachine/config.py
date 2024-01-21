@@ -55,28 +55,30 @@ print(f" required_packages: {required_packages} \n")
 
 if len(packages_to_install) > 0:
     try:
+        print("INSTALLING AS USUAL...")
         utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True)
     except Exception as e1:
         try:  
+            print("INSTALLING in '.' ...")
             utils.install_packages(StrVector(packages_to_install), repos="https://techtonique.r-universe.dev", dependencies=True, lib=".")
         except Exception as e2: 
             try:  
+                print("INSTALLING FROM COMMAND LINE...")
                 for pkg in packages_to_install:
                     subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev')"])
             except Exception as e3:
+                print("INSTALLING FROM COMMAND LINE in '.' ...")
                 for pkg in packages_to_install:
                     subprocess.run(['Rscript', 'e', f"utils.install_packages({pkg}, repos='https://techtonique.r-universe.dev', lib='.')"])
         
-
-# check R version
-print(f" R version of 'learningmachine' installed: {utils.packageVersion('learningmachine')}")
-
 FLOATMATRIX = FloatMatrix
 FLOATVECTOR = FloatVector
 STRVECTOR = StrVector
 try: 
+    print("IMPORTING IN PYTHON AS USUAL...")
     LEARNINGMACHINE_PACKAGE = importr("learningmachine")
 except Exception as e:
+    print("IMPORTING IN PYTHON FROM '.' ...")
     LEARNINGMACHINE_PACKAGE = importr("learningmachine", lib_loc=".")
 CHECK_PACKAGES = True
 DEEP_COPY = lambda x: pickle.loads(pickle.dumps(x, -1))
