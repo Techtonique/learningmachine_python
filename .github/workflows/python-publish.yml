@@ -36,9 +36,9 @@ jobs:
         Rscript -e 'try(utils::install.packages("R6", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
         Rscript -e 'try(utils::install.packages("Rcpp", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
         Rscript -e 'try(utils::install.packages("learningmachine", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), silent=TRUE)'
-        Rscript -e 'try(utils::install.packages("R6", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), lib=".", silent=TRUE)'
-        Rscript -e 'try(utils::install.packages("Rcpp", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), lib=".", silent=TRUE)'
-        Rscript -e 'try(utils::install.packages("learningmachine", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/")), lib=".", silent=TRUE)'
+        Rscript -e 'try(utils::install.packages("R6", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"), lib="."), silent=TRUE)'
+        Rscript -e 'try(utils::install.packages("Rcpp", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"), lib="."), silent=TRUE)'
+        Rscript -e 'try(utils::install.packages("learningmachine", repos=c("https://techtonique.r-universe.dev", "http://cran.rstudio.com/"), lib="."), silent=TRUE)'
 
     - name: Install Python Dependencies
       run: |     
