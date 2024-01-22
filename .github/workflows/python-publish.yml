@@ -50,6 +50,7 @@ jobs:
       run: |
         python --version
         python -m pip list
+        python -m pip freeze
         Rscript --version
     
     - name: Run Python Examples from Subdirectory
@@ -59,5 +60,5 @@ jobs:
     - name: Publish to PyPI                
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        password: ${{ secrets.PYPI_GLOBAL }}
+        password: ${{ secrets.PYPI_GLOBAL2 }}
         repository-url: https://upload.pypi.org/legacy/
