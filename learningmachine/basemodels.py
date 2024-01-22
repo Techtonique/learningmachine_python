@@ -26,7 +26,7 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
         try: 
             r['library']('learningmachine')
         except Exception as e:            
-            r['library']('learningmachine', lib_loc="./learningmachine_r")
+            r['library']('learningmachine', lib_loc="learningmachine_r")
         self.obj = r("BaseRegressor$new()")
 
     def fit(self, X, y):
@@ -65,7 +65,7 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         try: 
             r['library']('learningmachine')
         except Exception as e:            
-            r['library']('learningmachine', lib_loc="./learningmachine_r")
+            r['library']('learningmachine', lib_loc="learningmachine_r")
         self.obj = r("BaseClassifier$new()")
 
     def fit(self, X, y):
