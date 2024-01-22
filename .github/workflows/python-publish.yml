@@ -32,11 +32,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y r-base
-        sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
-        Rscript -e "try(install.packages(c('cli','cpp11','digest','dplyr','ellipsis','evaluate','fansi','fastmap','generics','glue','highr','htmltools','jsonlite','knitr','lifecycle','magrittr','pillar','pkgconfig','purrr','R6','Rcpp','remotes','repr','rlang','skimr','stringi','stringr','tibble','tidyr','tidyselect','utf8','vctrs','withr','xfun','yaml','base','boot','class','cluster','codetools','compiler','datasets','foreign','graphics','grDevices','grid','KernSmooth','lattice','MASS','Matrix','methods','mgcv','nlme','nnet','parallel','rpart','spatial','splines','stats','stats4','survival','tcltk','tools'), dependencies=TRUE, repos='https://cloud.r-project.org'), silent=FALSE)"
-        Rscript -e "try(install.packages(c('cli','cpp11','digest','dplyr','ellipsis','evaluate','fansi','fastmap','generics','glue','highr','htmltools','jsonlite','knitr','lifecycle','magrittr','pillar','pkgconfig','purrr','R6','Rcpp','remotes','repr','rlang','skimr','stringi','stringr','tibble','tidyr','tidyselect','utf8','vctrs','withr','xfun','yaml','base','boot','class','cluster','codetools','compiler','datasets','foreign','graphics','grDevices','grid','KernSmooth','lattice','MASS','Matrix','methods','mgcv','nlme','nnet','parallel','rpart','spatial','splines','stats','stats4','survival','tcltk','tools'), lib='.', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=FALSE)"
-        Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib="."), silent=TRUE)'
+        sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev  
+        Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='.', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=FALSE)"        
+        Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib="."), silent=FALSE)'
 
     - name: Install Python Dependencies
       run: |     
