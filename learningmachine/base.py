@@ -10,13 +10,8 @@ class Base(object):
     """
     Base class.
     """
-
     def __init__(self):
         """
         Initialize the model.
         """
         self.obj = None
-        if check_install_r_pkg() == 0:
-            raise ImportError(
-                "R package 'learningmachine' is not installed! \n"
-            )

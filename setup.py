@@ -4,6 +4,7 @@ import subprocess
 from installr import check_r_installed, install_r
 from os import path
 from setuptools import setup, find_packages
+from rpy2.robjects import r
 
 # Check if R is installed; if not, install it
 if not check_r_installed():
@@ -15,18 +16,12 @@ else:
 subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
 subprocess.run(['python', '-m', 'pip', 'install', 'rpy2>=3.4.5'])
 
-# from rpy2.robjects import r
-
-# try: 
-#     r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))")
-# except Exception as e1:
-#     try:
-#         r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
-#     except Exception as e2: 
-#         try: 
-#             subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
-#         except Exception as e3:
-#             subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
+try:   
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE)") 
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE)")        
+except Exception as e:
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE, lib='.', verbose=FALSE, quiet=TRUE)")    
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, lib='.', verbose=FALSE, quiet=TRUE)")    
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
