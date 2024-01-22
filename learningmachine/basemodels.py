@@ -68,10 +68,12 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         """
         super(Base, self).__init__()
         try:
+            r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, verbose=FALSE, quiet=TRUE)")
             self.obj = r(
                 "library('learningmachine'); learningmachine:::BaseClassifier$new()"
             )
         except Exception as e:
+            r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, lib='.', verbose=FALSE, quiet=TRUE)")
             self.obj = r(
                 "library('learningmachine', lib.loc='.'); learningmachine:::BaseClassifier$new()"
             )
