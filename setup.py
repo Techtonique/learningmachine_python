@@ -15,18 +15,18 @@ else:
 subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
 subprocess.run(['python', '-m', 'pip', 'install', 'rpy2>=3.4.5'])
 
-from rpy2.robjects import r
+# from rpy2.robjects import r
 
-try: 
-    r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))")
-except Exception as e1:
-    try:
-        r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
-    except Exception as e2: 
-        try: 
-            subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
-        except Exception as e3:
-            subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
+# try: 
+#     r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))")
+# except Exception as e1:
+#     try:
+#         r("utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')")
+#     except Exception as e2: 
+#         try: 
+#             subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'))"])
+#         except Exception as e3:
+#             subprocess.run(['Rscript', '-e', "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')"])
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
