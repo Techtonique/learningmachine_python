@@ -54,7 +54,10 @@ jobs:
         Rscript --version
     
     - name: Build Distribution Packages
-      run: python setup.py sdist bdist_wheel
+      run: |
+        python3 setup.py sdist
+        python3 setup.py bdist_wheel	
+        ls -l dist
           
     - name: Run Python Examples from Subdirectory
       run: |
