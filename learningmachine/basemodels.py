@@ -23,10 +23,14 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
         Initialize the model.
         """
         super(Base, self).__init__()
-        try: 
-            self.obj = r("library('learningmachine'); learningmachine::BaseRegressor$new()")
+        try:
+            self.obj = r(
+                "library('learningmachine'); learningmachine::BaseRegressor$new()"
+            )
         except Exception as e:
-            self.obj = r("library('learningmachine', lib.loc='.'); learningmachine::BaseRegressor$new()")
+            self.obj = r(
+                "library('learningmachine', lib.loc='.'); learningmachine::BaseRegressor$new()"
+            )
 
     def fit(self, X, y):
         """
@@ -61,10 +65,14 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         Initialize the model.
         """
         super(Base, self).__init__()
-        try: 
-            self.obj = r("library('learningmachine'); learningmachine:::BaseClassifier$new()")
+        try:
+            self.obj = r(
+                "library('learningmachine'); learningmachine:::BaseClassifier$new()"
+            )
         except Exception as e:
-            self.obj = r("library('learningmachine', lib.loc='.'); learningmachine:::BaseClassifier$new()")
+            self.obj = r(
+                "library('learningmachine', lib.loc='.'); learningmachine:::BaseClassifier$new()"
+            )
 
     def fit(self, X, y):
         """

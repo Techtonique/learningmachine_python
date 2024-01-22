@@ -33,11 +33,8 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y r-base
         sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
-        Rscript -e 'try(utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'try(utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
+        Rscript -e 'install.packages(c(base64enc, cli, cpp11, digest, dplyr, ellipsis, evaluate, fansi, fastmap, generics, glue, highr, htmltools, jsonlite, knitr, learningmachine, lifecycle, magrittr, pillar, pkgconfig, purrr, R6, Rcpp, remotes, repr, rlang, skimr, stringi, stringr, tibble, tidyr, tidyselect, utf8, vctrs, withr, xfun, yaml, base, boot, class, cluster, codetools, compiler, datasets, foreign, graphics, grDevices, grid, KernSmooth, lattice, MASS, Matrix, methods, mgcv, nlme, nnet, parallel, rpart, spatial, splines, stats, stats4, survival, tcltk, tools, utils), repos="https://cloud.r-project.org")'
         Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
-        Rscript -e 'utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
         Rscript -e 'utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib=".")'
 
     - name: Install Python Dependencies
