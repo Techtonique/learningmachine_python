@@ -36,16 +36,22 @@ else:
 
 # Install R packages
 print("Installing R packages...")
-commands = ['try(utils::install.packages("R6", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+commands1 = ['try(utils::install.packages("R6", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
             'try(utils::install.packages("Rcpp", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
             'try(utils::install.packages("skimr", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
             'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
-            
-for cmd in commands:
-    try:
+commands2 = ['try(utils::install.packages("R6", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+            'try(utils::install.packages("Rcpp", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("skimr", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
+
+try:             
+    for cmd in commands1:
         subprocess.run(['Rscript', '-e', cmd])
-    except Exception as e:
-        pass
+except Exception as e:
+    subprocess.run(['mkdir', 'learningmachine_r'])
+    for cmd in commands2:
+        subprocess.run(['Rscript', '-e', cmd])
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
