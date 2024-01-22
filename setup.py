@@ -4,7 +4,6 @@ import subprocess
 from installr import check_r_installed, install_r
 from os import path
 from setuptools import setup, find_packages
-from rpy2.robjects import r
 
 # Check if R is installed; if not, install it
 if not check_r_installed():
@@ -15,6 +14,8 @@ else:
 
 subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
 subprocess.run(['python', '-m', 'pip', 'install', 'rpy2>=3.4.5'])
+
+from rpy2.robjects import r
 
 try:   
     r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE)") 
