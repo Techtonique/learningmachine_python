@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import subprocess
+import sys 
 from installr import check_r_installed, install_r
 from os import path
 from setuptools import setup, find_packages
@@ -12,26 +13,30 @@ if not check_r_installed():
     print("Installing R...")
     install_r()
 else:
-    print("No R installation needed.")
+    print("No installation needed.")
 
 # Install R packages
-print("Installing R packages...")
-commands1 = ['try(utils::install.packages("R6", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
-            'try(utils::install.packages("Rcpp", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(utils::install.packages("skimr", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
-            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
-commands2 = ['try(utils::install.packages("R6", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
-            'try(utils::install.packages("Rcpp", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(utils::install.packages("skimr", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
-            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
-
-try:             
-    for cmd in commands1:
-        subprocess.run(['Rscript', '-e', cmd])
-except Exception as e:
-    subprocess.run(['mkdir', 'learningmachine_r'])
-    for cmd in commands2:
-        subprocess.run(['Rscript', '-e', cmd])
+commands1_lm = 'base::system.file(package = "learningmachine")' # check is installed 
+commands2_lm = 'base::system.file("learningmachine_r", package = "learningmachine")' # check is installed locally 
+exec_commands1_lm = subprocess.run(['Rscript', '-e', commands1_lm], capture_output=True, text=True)
+exec_commands2_lm = subprocess.run(['Rscript', '-e', commands2_lm], capture_output=True, text=True)
+if (len(exec_commands1_lm.stdout) == 7 and len(exec_commands2_lm.stdout) == 7): # kind of convoluted, but works    
+    print("Installing R packages...")
+    commands1 = ['try(utils::install.packages("R6", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+                'try(utils::install.packages("Rcpp", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+                'try(utils::install.packages("skimr", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+                'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
+    commands2 = ['try(utils::install.packages("R6", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+                'try(utils::install.packages("Rcpp", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+                'try(utils::install.packages("skimr", lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+                'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)']
+    try:             
+        for cmd in commands1:
+            subprocess.run(['Rscript', '-e', cmd])
+    except Exception as e:
+        subprocess.run(['mkdir', 'learningmachine_r'])
+        for cmd in commands2:
+            subprocess.run(['Rscript', '-e', cmd])
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
