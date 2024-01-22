@@ -16,7 +16,7 @@ class Base(object):
         Initialize the model.
         """
         self.obj = None
-        if check_install_r_pkg("learningmachine") == 0:
+        if check_install_r_pkg() == 0:
             raise ImportError(
                 "R package 'learningmachine' is not installed! \n"
             )
