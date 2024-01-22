@@ -34,17 +34,18 @@ if not check_r_installed():
 else:
     print("No R installation needed.")
 
-subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
-subprocess.run(['python', '-m', 'pip', 'install', 'rpy2'])
-
-from rpy2.robjects import r
-
-try:   
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE)") 
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE)")        
-except Exception as e:
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE, lib='.')")    
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, lib='.')")    
+# Install R packages
+print("Installing R packages...")
+commands = ['try(utils::install.packages("R6", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+            'try(utils::install.packages("Rcpp", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("skimr", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)', 
+            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib="."), silent=FALSE)']
+for cmd in commands:
+    try:
+        subprocess.run(['Rscript', '-e', cmd])
+    except Exception as e:
+        pass
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
