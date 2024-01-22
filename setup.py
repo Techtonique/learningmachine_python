@@ -12,7 +12,7 @@ from setuptools.command.install import install
 class CustomInstall(install):
     def run(self):
         # List of packages to install before setup
-        pre_install_packages = ['rpy2>=3.4.5']
+        pre_install_packages = ['pip', 'rpy2>=3.4.5']
 
         # Install pre-requisite packages
         self.distribution.fetch_build_eggs(pre_install_packages)
