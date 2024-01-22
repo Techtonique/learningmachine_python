@@ -59,21 +59,21 @@ def check_install_r_pkg():
                         [
                             "Rscript",
                             "-e",
-                            "utils::install.packages('R6', repos = 'https://cran.r-project.org', lib = '.')",
+                            "utils::install.packages('R6', repos = 'https://cran.r-project.org', lib = '.', dependencies = TRUE)",
                         ]
                     )
                     subprocess.run(
                         [
                             "Rscript",
                             "-e",
-                            "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', lib = '.')",
+                            "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', lib = '.', dependencies = TRUE)",
                         ]
                     )
                     subprocess.run(
                         [
                             "Rscript",
                             "-e",
-                            "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')",
+                            "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.', dependencies = TRUE)",
                         ]
                     )
     if check_pkg_installed() == True:
