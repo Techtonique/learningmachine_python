@@ -4,6 +4,28 @@ import subprocess
 from installr import check_r_installed, install_r
 from os import path
 from setuptools import setup, find_packages
+from setuptools.dist import Distribution
+from setuptools.command.install import install
+
+
+# Define a custom install command
+class CustomInstall(install):
+    def run(self):
+        # List of packages to install before setup
+        pre_install_packages = ['rpy2>=3.4.5']
+
+        # Install pre-requisite packages
+        self.distribution.fetch_build_eggs(pre_install_packages)
+
+        # Continue with the default installation process
+        install.run(self)
+
+# Use the custom install command
+class CustomDistribution(Distribution):
+    def get_command_class(self, command):
+        if command == 'install':
+            return CustomInstall
+        return Distribution.get_command_class(self, command)
 
 # Check if R is installed; if not, install it
 if not check_r_installed():
@@ -13,7 +35,7 @@ else:
     print("No R installation needed.")
 
 subprocess.run(['python', '-m', 'pip', 'install', '--upgrade', 'pip'])
-subprocess.run(['python', '-m', 'pip', 'install', 'rpy2>=3.4.5'])
+subprocess.run(['python', '-m', 'pip', 'install', 'rpy2'])
 
 from rpy2.robjects import r
 
@@ -68,4 +90,6 @@ setup(
     url='https://github.com/Techtonique/learningmachine',
     version='0.2.0',
     zip_safe=False,
+    cmdclass={'install': CustomInstall},
+    distribution=CustomDistribution,
 )
