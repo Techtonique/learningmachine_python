@@ -6,5 +6,6 @@ __version__ = "0.2.0"
 
 from .base import Base
 from .basemodels import BaseClassifier, BaseRegressor
+from .utils import check_install_r_pkg
 
-__all__ = ["Base", "BaseClassifier", "BaseRegressor"]
+__all__ = ["check_install_r_pkg", "Base", "BaseClassifier", "BaseRegressor"]
