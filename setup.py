@@ -21,8 +21,8 @@ try:
     r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE)") 
     r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE)")        
 except Exception as e:
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE, lib='.', verbose=FALSE, quiet=TRUE)")    
-    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, lib='.', verbose=FALSE, quiet=TRUE)")    
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages(c('Rcpp', 'R6'), dependencies = TRUE, lib='.')")    
+    r("options(repos = c(techtonique = 'https://techtonique.r-universe.dev', CRAN = 'https://cloud.r-project.org')); install.packages('learningmachine', dependencies = TRUE, lib='.')")    
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
