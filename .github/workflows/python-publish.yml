@@ -58,7 +58,3 @@ jobs:
     - name: Run Python Examples from Subdirectory
       run: |
         find examples -maxdepth 2 -name "*.py" -exec  python {} \;
-
-    - name: Cleanup
-      run: |
-        sudo killall -9 Rserve
