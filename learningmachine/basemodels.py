@@ -4,6 +4,7 @@ from rpy2.robjects.vectors import (
     FloatMatrix,
     FloatVector,
     IntVector,
+    StrVector,
 )
 
 from sklearn.base import BaseEstimator, RegressorMixin, ClassifierMixin
@@ -11,6 +12,7 @@ from .base import Base
 
 base = importr("base")
 stats = importr("stats")
+utils = importr("utils")
 
 
 class BaseRegressor(Base, BaseEstimator, RegressorMixin):
@@ -22,11 +24,22 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
         """
         Initialize the model.
         """
+
         super(Base, self).__init__()
-        try: 
-            r['library']('learningmachine')
-        except Exception as e:            
-            r['library']('learningmachine', lib_loc="learningmachine_r")
+
+        try:
+            base.library(StrVector(["learningmachine"]))
+        except Exception as e1:
+            try:
+                base.library(
+                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
+                )
+            except Exception as e2:
+                try:
+                    r["library"]("learningmachine")
+                except NotImplementedError as e3:
+                    r["library"]("learningmachine", lib_loc="learningmachine_r")
+
         self.obj = r("BaseRegressor$new()")
 
     def fit(self, X, y):
@@ -61,11 +74,22 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         """
         Initialize the model.
         """
+
         super(Base, self).__init__()
-        try: 
-            r['library']('learningmachine')
-        except Exception as e:            
-            r['library']('learningmachine', lib_loc="learningmachine_r")
+
+        try:
+            base.library(StrVector(["learningmachine"]))
+        except Exception as e1:
+            try:
+                base.library(
+                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
+                )
+            except Exception as e2:
+                try:
+                    r["library"]("learningmachine")
+                except NotImplementedError as e3:
+                    r["library"]("learningmachine", lib_loc="learningmachine_r")
+
         self.obj = r("BaseClassifier$new()")
 
     def fit(self, X, y):
