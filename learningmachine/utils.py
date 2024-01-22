@@ -8,7 +8,7 @@ def check_pkg_installed():
 
 
 # paste0("c(", paste0("'", rownames(installed.packages()), "'", collapse = ","), ")")
-# c('base64enc','cli','cpp11','digest','dplyr','ellipsis','evaluate','fansi','fastmap','generics','glue','highr','htmltools','jsonlite','knitr','learningmachine','lifecycle','magrittr','pillar','pkgconfig','purrr','R6','Rcpp','remotes','repr','rlang','skimr','stringi','stringr','tibble','tidyr','tidyselect','utf8','vctrs','withr','xfun','yaml','base','boot','class','cluster','codetools','compiler','datasets','foreign','graphics','grDevices','grid','KernSmooth','lattice','MASS','Matrix','methods','mgcv','nlme','nnet','parallel','rpart','spatial','splines','stats','stats4','survival','tcltk','tools','utils')
+# c('base64enc','cli','cpp11','digest','dplyr','ellipsis','evaluate','fansi','fastmap','generics','glue','highr','htmltools','jsonlite','knitr','lifecycle','magrittr','pillar','pkgconfig','purrr','R6','Rcpp','remotes','repr','rlang','skimr','stringi','stringr','tibble','tidyr','tidyselect','utf8','vctrs','withr','xfun','yaml','base','boot','class','cluster','codetools','compiler','datasets','foreign','graphics','grDevices','grid','KernSmooth','lattice','MASS','Matrix','methods','mgcv','nlme','nnet','parallel','rpart','spatial','splines','stats','stats4','survival','tcltk','tools','utils')
 
 
 def check_install_r_pkg():
