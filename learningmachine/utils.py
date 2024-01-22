@@ -4,7 +4,7 @@ from rpy2.robjects import r
 
 def check_pkg_installed():
     """Check if a package is installed in R."""
-    return len(r(f"system.file(package = 'learningmachine')")) > 0
+    return len(r("system.file(package = 'learningmachine')")) > 0
 
 
 def check_install_r_pkg():
@@ -37,14 +37,14 @@ def check_install_r_pkg():
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('R6', repos = 'https://cran.r-project.org', dependencies = TRUE)",
+                            "utils::install.packages('R6', repos = 'https://cran.r-project.org', dependencies = TRUE)",
                         ]
                     )
                     subprocess.run(
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', dependencies = TRUE)",
+                            "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', dependencies = TRUE)",
                         ]
                     )
                     subprocess.run(
