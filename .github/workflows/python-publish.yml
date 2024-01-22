@@ -33,12 +33,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y r-base
         sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev
-        Rscript -e 'try_R6 <- try(utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'try_Rcpp <- try(utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'try_lm <- try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)'
-        Rscript -e 'if (inherits(try_R6, "try-error")) utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
-        Rscript -e 'if (inherits(try_Rcpp, "try-error")) utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
-        Rscript -e 'if (inherits(try_lm, "try-error")) utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib=".")'
+        Rscript -e 'try(utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
+        Rscript -e 'try(utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE), silent=TRUE)'
+        Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)'
+        Rscript -e 'utils::install.packages("R6", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
+        Rscript -e 'utils::install.packages("Rcpp", repos="http://cran.rstudio.com", dependencies = TRUE, lib=".")'
+        Rscript -e 'utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib=".")'
 
     - name: Install Python Dependencies
       run: |     
