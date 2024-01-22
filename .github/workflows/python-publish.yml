@@ -33,8 +33,9 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y r-base
         sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev  
-        Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='.', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=FALSE)"        
-        Rscript -e 'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE, lib="."), silent=FALSE)'
+        mkdir learningmachine_r
+        Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
+        Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
 
     - name: Install Python Dependencies
       run: |     
@@ -43,7 +44,7 @@ jobs:
         python -m pip list
         python -m pip install rpy2
         python -m pip install -r requirements.txt
-        python -m pip install .
+        python -m pip install .  --verbose
 
     - name: Debug Info
       run: |
