@@ -2,34 +2,34 @@ import subprocess
 from rpy2.robjects import r
 
 
-def check_pkg_installed(pkg_name):
+def check_pkg_installed():
     """Check if a package is installed in R."""
-    return len(r(f"system.file(package = '{pkg_name}')")) > 0
+    return len(r(f"system.file(package = 'learningmachine')")) > 0
 
 
-def check_install_r_pkg(pkg_name):
+def check_install_r_pkg():
     """Install an R package."""
-    if check_pkg_installed(pkg_name) == False:
+    if check_pkg_installed() == False:
         try:
             r(
-                f"utils::install.packages('R6', repos = 'https://cran.r-project.org', dependencies = TRUE)"
+                "utils::install.packages('R6', repos = 'https://cran.r-project.org', dependencies = TRUE)"
             )
             r(
-                f"utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', dependencies = TRUE)"
+                "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', dependencies = TRUE)"
             )
             r(
-                f"utils::install.packages('{pkg_name}', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), dependencies = TRUE)"
+                "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), dependencies = TRUE)"
             )
         except Exception as e1:
             try:
                 r(
-                f"utils::install.packages('R6', repos = 'https://cran.r-project.org', dependencies = TRUE)"
+                    "utils::install.packages('R6', repos = 'https://cran.r-project.org', lib = '.', dependencies = TRUE)"
                 )
                 r(
-                    f"utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', dependencies = TRUE)"
+                    "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', lib = '.', dependencies = TRUE)"
                 )
                 r(
-                    f"utils::install.packages('{pkg_name}', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.', dependencies = TRUE)"
+                    "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.', dependencies = TRUE)"
                 )
             except Exception as e2:
                 try:
@@ -51,7 +51,7 @@ def check_install_r_pkg(pkg_name):
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('{pkg_name}', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), dependencies = TRUE)",
+                            "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), dependencies = TRUE)",
                         ]
                     )
                 except Exception as e3:
@@ -59,23 +59,23 @@ def check_install_r_pkg(pkg_name):
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('R6', repos = 'https://cran.r-project.org', lib = '.')",
+                            "utils::install.packages('R6', repos = 'https://cran.r-project.org', lib = '.')",
                         ]
                     )
                     subprocess.run(
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', lib = '.')",
+                            "utils::install.packages('Rcpp', repos = 'https://cran.r-project.org', lib = '.')",
                         ]
                     )
                     subprocess.run(
                         [
                             "Rscript",
                             "-e",
-                            f"utils::install.packages('{pkg_name}', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')",
+                            "utils::install.packages('learningmachine', repos = c('https://techtonique.r-universe.dev', 'https://cran.r-project.org'), lib = '.')",
                         ]
                     )
-    if check_pkg_installed(pkg_name) == True:
+    if check_pkg_installed() == True:
         return 1
     return 0
