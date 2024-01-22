@@ -22,7 +22,8 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
         """
         Initialize the model.
         """
-        super(Base, self).__init__()        
+        super(Base, self).__init__()
+        self.obj = r("learningmachine:::BaseRegressor$new()")
 
     def fit(self, X, y):
         """
@@ -57,6 +58,7 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         Initialize the model.
         """
         super(Base, self).__init__()
+        self.obj = r("learningmachine:::BaseClassifier$new()")
 
     def fit(self, X, y):
         """

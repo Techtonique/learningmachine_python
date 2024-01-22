@@ -10,6 +10,7 @@ class Base(object):
     """
     Base class.
     """
+
     def __init__(self):
         """
         Initialize the model.
