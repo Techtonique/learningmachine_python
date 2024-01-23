@@ -4,11 +4,8 @@
 
 import platform
 import subprocess
-
 from os import path
 from setuptools import setup, find_packages
-from setuptools.dist import Distribution
-from setuptools.command.install import install
 
 # 2 - utility functions -----------------------------------------------
 
@@ -77,7 +74,7 @@ def install_r():
 
     else:
         print("Unsupported platform. Unable to install R.")
-        
+
 # 3 - Install packages -----------------------------------------------
 
 # Check if R is installed; if not, install it

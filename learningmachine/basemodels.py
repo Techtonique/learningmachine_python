@@ -36,9 +36,9 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
                 )
             except Exception as e2:
                 try:
-                    r["library"]("learningmachine")
+                    r("library('learningmachine')")
                 except NotImplementedError as e3:
-                    r["library"]("learningmachine", lib_loc="learningmachine_r")
+                    r("library('learningmachine', lib.loc='learningmachine_r')")
 
         self.obj = r("BaseRegressor$new()")
 
@@ -86,9 +86,9 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
                 )
             except Exception as e2:
                 try:
-                    r["library"]("learningmachine")
+                    r("library('learningmachine')")
                 except NotImplementedError as e3:
-                    r["library"]("learningmachine", lib_loc="learningmachine_r")
+                    r("library('learningmachine', lib.loc='learningmachine_r')")
 
         self.obj = r("BaseClassifier$new()")
 
