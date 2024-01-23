@@ -44,6 +44,7 @@ jobs:
           python -m pip list
           python -m pip install rpy2
           python -m pip install -r requirements.txt
+          python -m pip install wheel
           python -m pip install .  --verbose
 
       - name: Debug Info
