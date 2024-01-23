@@ -1,6 +1,6 @@
 # learningmachine 
 
-Machine Learning with uncertainty quantification and  interpretability.
+Machine Learning with uncertainty quantification and interpretability.
 
 ## Install
 
