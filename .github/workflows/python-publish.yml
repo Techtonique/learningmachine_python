@@ -66,6 +66,6 @@ jobs:
 
       - name: Publish to PyPI                
         uses: pypa/gh-action-pypi-publish@release/v1
-        with: |
+        with: 
           password: ${{ secrets.PYPI_GLOBAL2 }}
           repository-url: https://upload.pypi.org/legacy/`
