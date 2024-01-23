@@ -149,6 +149,6 @@ setup(
     packages=find_packages(include=['learningmachine', 'learningmachine.*']),
     test_suite='tests',
     url='https://github.com/Techtonique/learningmachine',
-    version='0.2.0',
+    version='0.2.1',
     zip_safe=False,
 )

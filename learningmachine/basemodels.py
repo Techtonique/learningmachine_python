@@ -1,3 +1,4 @@
+from subprocess import run 
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import (
@@ -40,7 +41,10 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
                 except NotImplementedError as e3:
                     r("library('learningmachine', lib.loc='learningmachine_r')")
 
-        self.obj = r("BaseRegressor$new()")
+        try: 
+            self.obj = r("BaseRegressor$new()")
+        except NotImplementedError as e: # doesn't work yet
+            self.obj = run(['Rscript', '-e', "BaseRegressor$new()"], capture_output=True)
 
     def fit(self, X, y):
         """
@@ -90,7 +94,10 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
                 except NotImplementedError as e3:
                     r("library('learningmachine', lib.loc='learningmachine_r')")
 
-        self.obj = r("BaseClassifier$new()")
+        try: 
+            self.obj = r("BaseClassifier$new()")
+        except NotImplementedError as e: # doesn't work yet
+            self.obj = run(['Rscript', '-e', "BaseClassifier$new()"], capture_output=True)
 
     def fit(self, X, y):
         """
