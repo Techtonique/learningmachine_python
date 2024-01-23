@@ -56,7 +56,7 @@ jobs:
 
       - name: Build Distribution Packages
         run: |
-          python3 setup.py sdist bdist_wheel
+          python setup.py sdist bdist_wheel
           ls -l dist
 
       - name: Run Python Examples from Subdirectory
