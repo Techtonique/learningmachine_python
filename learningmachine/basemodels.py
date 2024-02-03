@@ -29,25 +29,10 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
         super(Base, self).__init__()
 
         try:
-            base.library(StrVector(["learningmachine"]))
-        except Exception as e1:
-            try:
-                base.library(
-                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
-                )
-            except Exception as e2:
-                try:
-                    r("try(library('learningmachine'), silence=TRUE)")
-                except NotImplementedError as e3:
-                    r(
-                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
-                    )
-
-        try:
-            self.obj = r("BaseRegressor$new()")
+            self.obj = r("learningmachine::BaseRegressor$new()")
         except NotImplementedError as e:  # doesn't work yet
             self.obj = run(
-                ["Rscript", "-e", "BaseRegressor$new()"],
+                ["Rscript", "-e", "learningmachine::BaseRegressor$new()"],
                 capture_output=True,
             )
 
@@ -87,25 +72,10 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
         super(Base, self).__init__()
 
         try:
-            base.library(StrVector(["learningmachine"]))
-        except Exception as e1:
-            try:
-                base.library(
-                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
-                )
-            except Exception as e2:
-                try:
-                    r("try(library('learningmachine'), silence=TRUE)")
-                except NotImplementedError as e3:
-                    r(
-                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
-                    )
-
-        try:
-            self.obj = r("BaseClassifier$new()")
+            self.obj = r("learningmachine::BaseClassifier$new()")
         except NotImplementedError as e:  # doesn't work yet
             self.obj = run(
-                ["Rscript", "-e", "BaseClassifier$new()"],
+                ["Rscript", "-e", "learningmachine::BaseClassifier$new()"],
                 capture_output=True,
             )
 

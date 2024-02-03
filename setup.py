@@ -5,7 +5,10 @@
 import platform
 import subprocess
 from os import path
+from rpy2.robjects.packages import importr
 from setuptools import setup, find_packages
+from rpy2.robjects.vectors import StrVector
+from rpy2.robjects import r
 
 # 2 - utility functions -----------------------------------------------
 
@@ -106,6 +109,24 @@ if (len(exec_commands1_lm.stdout) == 7 and len(exec_commands2_lm.stdout) == 7): 
         subprocess.run(['mkdir', 'learningmachine_r'])
         for cmd in commands2:
             subprocess.run(['Rscript', '-e', cmd])
+    
+    base = importr("base")
+    
+    try:
+        base.library(StrVector(["learningmachine"]))
+    except Exception as e1:
+        try:
+            base.library(
+                StrVector(["learningmachine"]), lib_loc="learningmachine_r"
+            )
+        except Exception as e2:
+            try:
+                r("try(library('learningmachine'), silence=TRUE)")
+            except NotImplementedError as e3:
+                r(
+                    "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+                )
+
 
 """The setup script."""
 here = path.abspath(path.dirname(__file__))

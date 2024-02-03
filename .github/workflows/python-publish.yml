@@ -81,6 +81,29 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
+      
+      - name: Install RTools
+        run: |
+          $rtoolsVersion = "35"  # Adjust the version as needed
+          $rtoolsUrl = "https://cran.r-project.org/bin/windows/Rtools/rtools$($rtoolsVersion)_x86_64.exe"
+          $rtoolsInstallPath = "C:\RTools"
+          
+          # Download RTools installer
+          Invoke-WebRequest -Uri $rtoolsUrl -OutFile "RTools.exe"
+          
+          # Install RTools
+          Start-Process -Wait -FilePath "RTools.exe" -ArgumentList "/SILENT /DIR=$rtoolsInstallPath"
+          
+          # Add RTools to the system PATH
+          $env:Path += ";$rtoolsInstallPath\bin;$rtoolsInstallPath\mingw64\bin"
+          
+          # Remove the downloaded installer
+          Remove-Item "RTools.exe"
+          
+          Write-Host "RTools $rtoolsVersion installed successfully."
+  
+      - name: Show RTools Version
+        run: rtools40version
 
       - name: Install R Dependencies
         run: |
