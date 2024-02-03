@@ -1,4 +1,4 @@
-from subprocess import run 
+from subprocess import run
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import (
@@ -37,14 +37,19 @@ class BaseRegressor(Base, BaseEstimator, RegressorMixin):
                 )
             except Exception as e2:
                 try:
-                    r("library('learningmachine')")
+                    r("try(library('learningmachine'), silence=TRUE)")
                 except NotImplementedError as e3:
-                    r("library('learningmachine', lib.loc='learningmachine_r')")
+                    r(
+                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+                    )
 
-        try: 
+        try:
             self.obj = r("BaseRegressor$new()")
-        except NotImplementedError as e: # doesn't work yet
-            self.obj = run(['Rscript', '-e', "BaseRegressor$new()"], capture_output=True)
+        except NotImplementedError as e:  # doesn't work yet
+            self.obj = run(
+                ["Rscript", "-e", "BaseRegressor$new()"],
+                capture_output=True,
+            )
 
     def fit(self, X, y):
         """
@@ -90,14 +95,19 @@ class BaseClassifier(Base, BaseEstimator, ClassifierMixin):
                 )
             except Exception as e2:
                 try:
-                    r("library('learningmachine')")
+                    r("try(library('learningmachine'), silence=TRUE)")
                 except NotImplementedError as e3:
-                    r("library('learningmachine', lib.loc='learningmachine_r')")
+                    r(
+                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+                    )
 
-        try: 
+        try:
             self.obj = r("BaseClassifier$new()")
-        except NotImplementedError as e: # doesn't work yet
-            self.obj = run(['Rscript', '-e', "BaseClassifier$new()"], capture_output=True)
+        except NotImplementedError as e:  # doesn't work yet
+            self.obj = run(
+                ["Rscript", "-e", "BaseClassifier$new()"],
+                capture_output=True,
+            )
 
     def fit(self, X, y):
         """
