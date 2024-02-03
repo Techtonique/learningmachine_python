@@ -83,7 +83,9 @@ jobs:
           python-version: 3.9
       
       - name: Install RTools
-        run: |          
+        run: | 
+          # Define the RTools version and download URL
+          $rtoolsVersion = "4.2"         
           $rtoolsUrl = "https://cran.r-project.org/bin/windows/Rtools/rtools42/files/rtools42-5355-5357.exe"
           $rtoolsInstallPath = "C:\RTools"
           
@@ -108,9 +110,6 @@ jobs:
           
           Write-Host "RTools $rtoolsVersion installed successfully."
   
-      - name: Show RTools Version
-        run: rtools40version
-
       - name: Install R Dependencies
         run: |
           choco install r
@@ -165,8 +164,6 @@ jobs:
       - name: Install R Dependencies
         run: |
           brew install r
-          brew install openssl
-          brew install libxml2
           mkdir learningmachine_r
           Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
           Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
