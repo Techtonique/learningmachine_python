@@ -83,9 +83,8 @@ jobs:
           python-version: 3.9
       
       - name: Install RTools
-        run: |
-          $rtoolsVersion = "35"  # Adjust the version as needed
-          $rtoolsUrl = "https://cran.r-project.org/bin/windows/Rtools/rtools$($rtoolsVersion)_x86_64.exe"
+        run: |          
+          $rtoolsUrl = "https://cran.r-project.org/bin/windows/Rtools/rtools42/files/rtools42-5355-5357.exe"
           $rtoolsInstallPath = "C:\RTools"
           
           # Add try-catch block to handle errors
