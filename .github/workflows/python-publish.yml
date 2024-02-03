@@ -64,8 +64,110 @@ jobs:
         run: |
           find examples -maxdepth 2 -name "*.py" -exec  python {} \;
 
-      - name: Publish to PyPI                
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with: 
-          password: ${{ secrets.PYPI_GLOBAL2 }}
-          repository-url: https://upload.pypi.org/legacy/
+      #- name: Publish to PyPI                
+      #  uses: pypa/gh-action-pypi-publish@release/v1
+      #  with: 
+      #    password: ${{ secrets.PYPI_GLOBAL2 }}
+      #    repository-url: https://upload.pypi.org/legacy/
+
+  windows-run:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install R Dependencies
+        run: |
+          choco install r
+          choco install openssl.light
+          choco install curl
+          mkdir learningmachine_r
+          Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
+          Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
+
+      - name: Install Python Dependencies
+        run: |     
+          python -m pip install rpy2
+          python -m pip install -r requirements.txt
+          python -m pip install wheel
+          python -m pip install .  --verbose
+
+      - name: Debug Info
+        run: |
+          python --version
+          python -m pip list
+          python -m pip freeze
+          Rscript --version
+          ls -la 
+
+      - name: Build Distribution Packages
+        run: |
+          python setup.py sdist bdist_wheel
+          ls -l dist
+
+      - name: Run Python Examples from Subdirectory
+        run: |
+          Get-ChildItem -Recurse -Filter "*.py" | ForEach-Object { python $_.FullName }
+
+      #- name: Publish to PyPI                
+      #  uses: pypa/gh-action-pypi-publish@release/v1
+      #  with: 
+      #    password: ${{ secrets.PYPI_GLOBAL2 }}
+      #    repository-url: https://upload.pypi.org/legacy/
+
+  macos-run:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install R Dependencies
+        run: |
+          brew install r
+          brew install openssl
+          brew install libxml2
+          mkdir learningmachine_r
+          Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
+          Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
+
+      - name: Install Python Dependencies
+        run: |     
+          python -m pip install rpy2
+          python -m pip install -r requirements.txt
+          python -m pip install wheel
+          python -m pip install .  --verbose
+
+      - name: Debug Info
+        run: |
+          python --version
+          python -m pip list
+          python -m pip freeze
+          Rscript --version
+          ls -la 
+
+      - name: Build Distribution Packages
+        run: |
+          python setup.py sdist bdist_wheel
+          ls -l dist
+
+      - name: Run Python Examples from Subdirectory
+        run: |
+          find examples -maxdepth 2 -name "*.py" -exec  python {} \;
+
+      #- name: Publish to PyPI                
+      #  uses: pypa/gh-action-pypi-publish@release/v1
+      #  with: 
+      #    password: ${{ secrets.PYPI_GLOBAL2 }}
+      #    repository-url: https://upload.pypi.org/legacy/
