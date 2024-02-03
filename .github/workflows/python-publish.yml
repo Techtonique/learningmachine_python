@@ -88,8 +88,15 @@ jobs:
           $rtoolsUrl = "https://cran.r-project.org/bin/windows/Rtools/rtools$($rtoolsVersion)_x86_64.exe"
           $rtoolsInstallPath = "C:\RTools"
           
-          # Download RTools installer
-          Invoke-WebRequest -Uri $rtoolsUrl -OutFile "RTools.exe"
+          # Add try-catch block to handle errors
+          try {
+              Invoke-WebRequest -Uri $rtoolsUrl -OutFile "RTools.exe" -ErrorAction Stop
+              Write-Host "RTools downloaded successfully."
+          }
+          catch {
+              Write-Host "Error downloading RTools. $_"
+              exit 1  # Exit the script with an error code
+          }
           
           # Install RTools
           Start-Process -Wait -FilePath "RTools.exe" -ArgumentList "/SILENT /DIR=$rtoolsInstallPath"
