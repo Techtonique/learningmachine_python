@@ -4,7 +4,6 @@
 
 import subprocess
 
-subprocess.run(["pip", "install", "setuptools"])
 subprocess.run(["pip", "install", "rpy2"])
 
 from os import path
