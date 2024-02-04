@@ -10,12 +10,9 @@ subprocess.run(["pip", "install", "rpy2"])
 from os import path
 import platform
 from setuptools import setup, find_packages
-from rpy2.robjects.vectors import StrVector
-from rpy2.robjects import r
-from rpy2.robjects.packages import importr
+
 
 # 2 - utility functions -----------------------------------------------
-
 
 def check_r_installed():
     current_platform = platform.system()
@@ -62,7 +59,6 @@ def check_r_installed():
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
         return False
 
-
 def install_r():
     current_platform = platform.system()
 
@@ -96,63 +92,15 @@ def install_r():
         print("Unsupported platform. Unable to install R.")
 
 
-# 3 - Install packages -----------------------------------------------
-
-# Check if R is installed; if not, install it
-if check_r_installed() == False:
-    print("Installing R...")
+# 3 - check if R is installed -----------------------------------------------
+        
+if not check_r_installed():
     install_r()
 else:
-    print("R is already installed, no R installation needed.")
+    print("R is already installed.")
 
-# Install R packages
-commands1_lm = (
-    'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed
-)
-commands2_lm = 'base::system.file("learningmachine_r", package = "learningmachine")'  # check "learningmachine" is installed locally
-exec_commands1_lm = subprocess.run(
-    ["Rscript", "-e", commands1_lm], capture_output=True, text=True
-)
-exec_commands2_lm = subprocess.run(
-    ["Rscript", "-e", commands2_lm], capture_output=True, text=True
-)
-if (
-    len(exec_commands1_lm.stdout) == 7 and len(exec_commands2_lm.stdout) == 7
-):  # kind of convoluted, but works
-    print("Installing R packages...")
-    commands1 = [
-        'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
-        'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
-    ]
-    commands2 = [
-        'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
-        'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
-    ]
-    try:
-        for cmd in commands1:
-            subprocess.run(["Rscript", "-e", cmd])
-    except Exception as e: # can't install packages globally
-        subprocess.run(["mkdir", "learningmachine_r"])
-        for cmd in commands2:
-            subprocess.run(["Rscript", "-e", cmd])
-
-    base = importr("base")
-
-    try:
-        base.library(StrVector(["learningmachine"]))
-    except Exception as e1: # can't load the package from the global environment
-        try:
-            base.library(
-                StrVector(["learningmachine"]), lib_loc="learningmachine_r"
-            )
-        except Exception as e2: # well, we tried
-            try:
-                r("try(library('learningmachine'), silence=TRUE)")
-            except NotImplementedError as e3: # well, we tried everything at this point
-                r(
-                    "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
-                )
-
+# 4 - Package setup -----------------------------------------------
+    
 """The setup script."""
 here = path.abspath(path.dirname(__file__))
 
@@ -188,7 +136,7 @@ setup(
     name="learningmachine",
     packages=find_packages(include=["learningmachine", "learningmachine.*"]),
     test_suite="tests",
-    url="https://github.com/Techtonique/learningmachine",
+    url="https://github.com/Techtonique/learningmachine_python",
     version="0.2.2",
     zip_safe=False,
 )

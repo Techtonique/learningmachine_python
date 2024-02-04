@@ -2,7 +2,7 @@ import learningmachine as lm
 import numpy as np
 
 from sklearn.datasets import load_diabetes, load_wine
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.linear_model import LinearRegression
 from rpy2.robjects.vectors import FloatMatrix, FloatVector, StrVector
 from rpy2.robjects import pandas2ri, r
@@ -21,8 +21,17 @@ start = time()
 fit_obj.fit(X_train, y_train)
 print("Elapsed time: ", time() - start)
 
+print(dir(fit_obj))
+print(fit_obj.get_params())
+print(fit_obj.type_fit)
+print(fit_obj.obj)
+
 ## Compute accuracy
 
 preds = fit_obj.predict(X_test)
 acc = np.mean(y_test == preds)
 print(acc)
+
+print(fit_obj.score(X_test, y_test))
+
+print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
