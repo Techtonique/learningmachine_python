@@ -72,22 +72,25 @@ jobs:
 
   macos-run:
     runs-on: macos-latest
-
+  
+    container:
+      image: python:3.9
+      options: --name=r-service
+  
     services:
       r:
         image: rocker/r-ver:4.1.2
         ports:
           - 6311:6311
-        options: --name=r-service
-
+  
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-
+  
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.9      
 
       - name: Install R Dependencies
         run: |
