@@ -1,5 +1,5 @@
-numpy 
+numpy
 pandas
 rpy2>=3.4.5
 scikit-learn
-scipy 
+scipy
