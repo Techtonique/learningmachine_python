@@ -64,63 +64,46 @@ jobs:
         run: |
           find examples -maxdepth 2 -name "*.py" -exec  python {} \;
 
-      # - name: Publish to PyPI                
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with: 
-      #     password: ${{ secrets.PYPI_GLOBAL2 }}
-      #     repository-url: https://upload.pypi.org/legacy/
+      - name: Publish to PyPI                
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with: 
+            password: ${{ secrets.PYPI_GLOBAL2 }}
+            repository-url: https://upload.pypi.org/legacy/
 
   macos-run:
     runs-on: macos-latest
-  
-    services:
-      r:
-        image: rocker/r-ver:4.1.2
-        ports:
-          - 6311:6311
-  
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-  
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9      
+          python-version: 3.9
 
+      - name: Debug Info for macOS
+        run: |
+          python --version
+          ls -la
+      
       - name: Install R Dependencies
         run: |
-          brew install r
+          brew install r 
           mkdir learningmachine_r
           Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
           Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
-
+  
       - name: Install Python Dependencies
-        run: |     
-          ls -la
-          python -m pip install rpy2
-          python -m pip install numpy pandas scikit-learn scipy
-          python -m pip install wheel          
+        run: |                 
+            python -m ensurepip --default-pip
+            python -m pip install --upgrade pip       
+            python -m pip list
+            python -m pip install rpy2
+            python -m pip install numpy pandas scikit-learn scipy
+            python -m pip install wheel
+            python -m pip install .  --verbose
 
-      - name: Debug Info
+      - name: Run Python Examples from Subdirectory on macOS
         run: |
-          python --version
-          python -m pip list
-          python -m pip freeze
-          Rscript --version           
-
-      - name: Build Distribution Packages
-        run: |
-          python setup.py bdist_wheel
-          ls -l dist
-
-      - name: Run Python Examples from Subdirectory
-        run: |
-          pip install ./dist --verbose
           find examples -maxdepth 2 -name "*.py" -exec  python {} \;
-
-      # - name: Publish to PyPI                
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with: 
-      #     password: ${{ secrets.PYPI_GLOBAL2 }}
-      #     repository-url: https://upload.pypi.org/legacy/
