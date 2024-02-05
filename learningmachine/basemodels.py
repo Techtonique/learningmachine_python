@@ -43,7 +43,7 @@ def load_learningmachine():
         try:
             for cmd in commands1:
                 subprocess.run(["Rscript", "-e", cmd])
-        except Exception as e:  # can't install packages globally
+        except NotImplementedError as e:  # can't install packages globally
             subprocess.run(["mkdir", "learningmachine_r"])
             for cmd in commands2:
                 subprocess.run(["Rscript", "-e", cmd])
@@ -51,13 +51,13 @@ def load_learningmachine():
         try:
             base.library(StrVector(["learningmachine"]))
         except (
-            Exception
+            NotImplementedError
         ) as e1:  # can't load the package from the global environment
             try:
                 base.library(
                     StrVector(["learningmachine"]), lib_loc="learningmachine_r"
                 )
-            except Exception as e2:  # well, we tried
+            except NotImplementedError as e2:  # well, we tried
                 try:
                     r("try(library('learningmachine'), silence=FALSE)")
                 except (
@@ -82,16 +82,16 @@ class BaseRegressor(Base, RegressorMixin):
         try:
             load_learningmachine()
             self.obj = r("learningmachine::BaseRegressor$new()")
-        except Exception as e:
+        except NotImplementedError as e:
             try:
                 r.library("learningmachine")
                 self.obj = r("BaseRegressor$new()")
-            except Exception as e:
+            except NotImplementedError as e:
                 try:
                     self.obj = r(
                         "library(learningmachine); BaseRegressor$new()"
                     )
-                except Exception as e:
+                except NotImplementedError as e:
                     self.obj = r(
                         """
                                  library(learningmachine); 
@@ -194,16 +194,16 @@ class BaseClassifier(Base, ClassifierMixin):
         try:
             load_learningmachine()
             self.obj = r("learningmachine::BaseClassifier$new()")
-        except Exception as e:
+        except NotImplementedError as e:
             try:
                 r.library("learningmachine")
                 self.obj = r("BaseClassifier$new()")
-            except Exception as e:
+            except NotImplementedError as e:
                 try:
                     self.obj = r(
                         "library(learningmachine); BaseClassifier$new()"
                     )
-                except Exception as e:
+                except NotImplementedError as e:
                     self.obj = r(
                         """library(learningmachine); 
                                  BaseClassifier$new()"""

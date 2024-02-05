@@ -81,7 +81,7 @@ def install_r():
         )
         try: 
             subprocess.run(install_command, shell=True)
-        except Exception as e:
+        except NotImplementedError as e:
             print("Error installing R on this Linux distribution. Please check manually: https://cloud.r-project.org/")
 
     elif current_platform == "Darwin":  # macOS
@@ -89,7 +89,7 @@ def install_r():
         install_command = "brew install r"
         try: 
             subprocess.run(install_command, shell=True)
-        except Exception as e:
+        except NotImplementedError as e:
             print("Error installing R on macOS. Please check manually: https://cloud.r-project.org/")
 
     else:
@@ -121,7 +121,7 @@ def load_learningmachine():
         try:
             for cmd in commands1:
                 subprocess.run(["Rscript", "-e", cmd])
-        except Exception as e:  # can't install packages globally
+        except NotImplementedError as e:  # can't install packages globally
             subprocess.run(["mkdir", "learningmachine_r"])
             for cmd in commands2:
                 subprocess.run(["Rscript", "-e", cmd])
@@ -129,13 +129,13 @@ def load_learningmachine():
         try:
             base.library(StrVector(["learningmachine"]))
         except (
-            Exception
+            NotImplementedError
         ) as e1:  # can't load the package from the global environment
             try:
                 base.library(
                     StrVector(["learningmachine"]), lib_loc="learningmachine_r"
                 )
-            except Exception as e2:  # well, we tried
+            except NotImplementedError as e2:  # well, we tried
                 try:
                     r("try(library('learningmachine'), silence=TRUE)")
                 except (
