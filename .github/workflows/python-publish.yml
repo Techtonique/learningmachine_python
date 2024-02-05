@@ -26,7 +26,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.10
 
       - name: Install R Dependencies
         run: |
@@ -73,10 +73,6 @@ jobs:
   macos-run:
     runs-on: macos-latest
   
-    container:
-      image: python:3.9
-      options: --name=r-service
-  
     services:
       r:
         image: rocker/r-ver:4.1.2
@@ -90,7 +86,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9      
+          python-version: 3.10      
 
       - name: Install R Dependencies
         run: |
