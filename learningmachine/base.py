@@ -1,15 +1,8 @@
 import subprocess
-from functools import lru_cache
-from rpy2.robjects import r
-from rpy2.robjects.packages import importr
-from rpy2.robjects.vectors import StrVector
 from sklearn.base import BaseEstimator
-
-base = importr("base")
-stats = importr("stats")
+from rpy2.robjects.vectors import StrVector
 
 
-@lru_cache(maxsize=32)
 def load_learningmachine():
     # Install R packages
     commands1_lm = 'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed
@@ -26,12 +19,12 @@ def load_learningmachine():
     ):  # kind of convoluted, but works
         print("Installing R packages along with 'learningmachine'...")
         commands1 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
-            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
         ]
         commands2 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
-            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
         ]
         try:
             for cmd in commands1:
