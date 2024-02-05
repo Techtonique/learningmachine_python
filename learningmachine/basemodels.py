@@ -89,15 +89,13 @@ class BaseRegressor(Base, RegressorMixin):
             except NotImplementedError as e:
                 try:
                     self.obj = r(
-                        "library(learningmachine); BaseRegressor$new()"
-                    )
-                except NotImplementedError as e:
-                    self.obj = r(
                         """
                                  library(learningmachine); 
                                  BaseRegressor$new()
                                  """
                     )
+                except NotImplementedError as e:
+                    print("R package can't be loaded: ", e)
 
     def fit(self, X, y):
         """
@@ -199,15 +197,13 @@ class BaseClassifier(Base, ClassifierMixin):
                 r.library("learningmachine")
                 self.obj = r("BaseClassifier$new()")
             except NotImplementedError as e:
-                try:
-                    self.obj = r(
-                        "library(learningmachine); BaseClassifier$new()"
-                    )
-                except NotImplementedError as e:
+                try:                    
                     self.obj = r(
                         """library(learningmachine); 
                                  BaseClassifier$new()"""
                     )
+                except NotImplementedError as e:
+                    print("R package can't be loaded: ", e)
 
     def fit(self, X, y):
         """

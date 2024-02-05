@@ -5,6 +5,10 @@
 import subprocess
 
 subprocess.run(["pip", "install", "rpy2"])
+try: 
+    subprocess.run(["pip", "install", "setuptools"])
+except ModuleNotFoundError as e:
+    print("Error installing setuptools. Please install setuptools manually.")
 
 from os import path
 import platform
