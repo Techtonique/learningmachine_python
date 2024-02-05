@@ -57,6 +57,7 @@ jobs:
 
       - name: Build Distribution Packages
         run: |
+          python3 -m pip install setuptools
           python setup.py sdist bdist_wheel
           ls -l dist
 
