@@ -79,8 +79,25 @@ class BaseRegressor(Base, RegressorMixin):
         """
         super().__init__()
         self.type_fit = "regression"
-        load_learningmachine()
-        self.obj = r("learningmachine::BaseRegressor$new()")
+        try:
+            load_learningmachine()
+            self.obj = r("learningmachine::BaseRegressor$new()")
+        except Exception as e:
+            try:
+                r.library("learningmachine")
+                self.obj = r("BaseRegressor$new()")
+            except Exception as e:
+                try:
+                    self.obj = r(
+                        "library(learningmachine); BaseRegressor$new()"
+                    )
+                except Exception as e:
+                    self.obj = r(
+                        """
+                                 library(learningmachine); 
+                                 BaseRegressor$new()
+                                 """
+                    )
 
     def fit(self, X, y):
         """
@@ -174,8 +191,23 @@ class BaseClassifier(Base, ClassifierMixin):
         """
         super().__init__()
         self.type_fit = "classification"
-        load_learningmachine()
-        self.obj = r("learningmachine::BaseClassifier$new()")
+        try:
+            load_learningmachine()
+            self.obj = r("learningmachine::BaseClassifier$new()")
+        except Exception as e:
+            try:
+                r.library("learningmachine")
+                self.obj = r("BaseClassifier$new()")
+            except Exception as e:
+                try:
+                    self.obj = r(
+                        "library(learningmachine); BaseClassifier$new()"
+                    )
+                except Exception as e:
+                    self.obj = r(
+                        """library(learningmachine); 
+                                 BaseClassifier$new()"""
+                    )
 
     def fit(self, X, y):
         """
