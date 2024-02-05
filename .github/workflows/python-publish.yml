@@ -107,3 +107,9 @@ jobs:
       - name: Run Python Examples from Subdirectory on macOS
         run: |
           find examples -maxdepth 2 -name "*.py" -exec  python {} \;
+        
+      - name: Publish to PyPI                
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with: 
+            password: ${{ secrets.PYPI_GLOBAL2 }}
+            repository-url: https://upload.pypi.org/legacy/
