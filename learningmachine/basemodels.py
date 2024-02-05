@@ -1,6 +1,6 @@
 import numpy as np
 import sklearn.metrics as skm
-from subprocess import run
+import subprocess
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import (
@@ -17,6 +17,57 @@ stats = importr("stats")
 utils = importr("utils")
 
 
+def load_learningmachine():
+    # Install R packages
+    commands1_lm = 'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed
+    commands2_lm = 'base::system.file("learningmachine_r", package = "learningmachine")'  # check "learningmachine" is installed locally
+    exec_commands1_lm = subprocess.run(
+        ["Rscript", "-e", commands1_lm], capture_output=True, text=True
+    )
+    exec_commands2_lm = subprocess.run(
+        ["Rscript", "-e", commands2_lm], capture_output=True, text=True
+    )
+    if (
+        len(exec_commands1_lm.stdout) == 7
+        and len(exec_commands2_lm.stdout) == 7
+    ):  # kind of convoluted, but works
+        print("Installing R packages along with 'learningmachine'...")
+        commands1 = [
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+        ]
+        commands2 = [
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+        ]
+        try:
+            for cmd in commands1:
+                subprocess.run(["Rscript", "-e", cmd])
+        except Exception as e:  # can't install packages globally
+            subprocess.run(["mkdir", "learningmachine_r"])
+            for cmd in commands2:
+                subprocess.run(["Rscript", "-e", cmd])
+
+        try:
+            base.library(StrVector(["learningmachine"]))
+        except (
+            Exception
+        ) as e1:  # can't load the package from the global environment
+            try:
+                base.library(
+                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
+                )
+            except Exception as e2:  # well, we tried
+                try:
+                    r("try(library('learningmachine'), silence=FALSE)")
+                except (
+                    NotImplementedError
+                ) as e3:  # well, we tried everything at this point
+                    r(
+                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=FALSE)"
+                    )
+
+
 class BaseRegressor(Base, RegressorMixin):
     """
     Base Regressor.
@@ -28,6 +79,7 @@ class BaseRegressor(Base, RegressorMixin):
         """
         super().__init__()
         self.type_fit = "regression"
+        load_learningmachine()
         self.obj = r("learningmachine::BaseRegressor$new()")
 
     def fit(self, X, y):
@@ -122,6 +174,7 @@ class BaseClassifier(Base, ClassifierMixin):
         """
         super().__init__()
         self.type_fit = "classification"
+        load_learningmachine()
         self.obj = r("learningmachine::BaseClassifier$new()")
 
     def fit(self, X, y):
