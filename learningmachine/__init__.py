@@ -4,6 +4,7 @@ __author__ = """T. Moudiki"""
 __email__ = "thierry.moudiki@gmail.com"
 
 from .base import Base
-from .basemodels import BaseClassifier, BaseRegressor
+from .classifier import Classifier
+from .regression import Regressor
 
-__all__ = ["Base", "BaseClassifier", "BaseRegressor"]
+__all__ = ["Base", "Classifier", "Regressor"]
