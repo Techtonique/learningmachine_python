@@ -197,7 +197,7 @@ class BaseClassifier(Base, ClassifierMixin):
                 r.library("learningmachine")
                 self.obj = r("BaseClassifier$new()")
             except NotImplementedError as e:
-                try:                    
+                try:
                     self.obj = r(
                         """library(learningmachine); 
                                  BaseClassifier$new()"""
