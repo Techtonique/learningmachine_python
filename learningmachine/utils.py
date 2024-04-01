@@ -60,3 +60,8 @@ def check_install_r_pkg():
     if check_pkg_installed() == True:
         return 1
     return 0
+
+
+# Formatting object as a string
+def format_value(value):
+    return f"'{value}'"

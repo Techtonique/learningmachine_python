@@ -4,6 +4,7 @@ from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import FloatMatrix, FloatVector
 from sklearn.base import RegressorMixin
 from .base import Base
+from .utils import format_value
 
 base = importr("base")
 stats = importr("stats")
@@ -15,25 +16,52 @@ class Regressor(Base, RegressorMixin):
     Regressor.
     """
 
-    def __init__(self):
+    def __init__(
+            self,
+        method="ranger",
+        pi_method=None,
+        level=None,
+        type_prediction_set="score",
+        B=None,
+        seed=123,
+    ):
         """
         Initialize the model.
         """
-        super().__init__()
-        self.type_fit = "regression"
+        super().__init__(
+            method=method,
+            pi_method=pi_method,
+            level=level,
+            type_prediction_set=type_prediction_set,
+            B=B,
+            seed=seed,
+        )
+        self.name = "Regressor"
+        self.type = "regression"
+        self.method = method
+        self.pi_method = pi_method
+        self.level = level
+        self.type_prediction_set = type_prediction_set
+        self.B = B
+        self.seed = seed
+
         try:
             self.load_learningmachine()
-            self.obj = r("learningmachine::Regressor$new()")
+            self.obj = r(
+                f"learningmachine::Regressor$new(method = {format_value(self.method)})"
+            )
         except NotImplementedError as e:
             try:
                 r.library("learningmachine")
-                self.obj = r("Regressor$new()")
+                self.obj = r(
+                    f"Regressor$new(method = {format_value(self.method)})"
+                )
             except NotImplementedError as e:
                 try:
                     self.obj = r(
-                        """
+                        f"""
                                  library(learningmachine); 
-                                 Regressor$new()
+                                 Regressor$new(method = {format_value(self.method)})
                                  """
                     )
                 except NotImplementedError as e:
@@ -44,9 +72,10 @@ class Regressor(Base, RegressorMixin):
         Fit the model according to the given training data.
         """
         self.obj["fit"](
-            r.matrix(
-                FloatVector(X), byrow=True, nrow=X.shape[0], ncol=X.shape[1]
-            ),
+            r.matrix(FloatVector(X.ravel()), 
+                       byrow=True,
+                       ncol=X.shape[1],
+                       nrow=X.shape[0]),
             FloatVector(y),
         )
         return self
@@ -57,8 +86,9 @@ class Regressor(Base, RegressorMixin):
         """
         return np.asarray(
             self.obj["predict"](
-                r.matrix(
-                    FloatMatrix(X), byrow=True, nrow=X.shape[0], ncol=X.shape[1]
-                )
+                r.matrix(FloatVector(X.ravel()), 
+                       byrow=True,
+                       ncol=X.shape[1],
+                       nrow=X.shape[0])
             )
         )

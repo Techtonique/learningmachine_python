@@ -34,6 +34,7 @@ clean-build: ## remove build artifacts
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -fr {} +
+	find . -name '*.DS_Store' -exec rm -fr {} +
 
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
@@ -71,8 +72,8 @@ dist: clean ## builds source and wheel package
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	pip install black 
-	python3 -m black learningmachine --line-length 80
+	##pip install black 
+	##python3 -m black learningmachine --line-length 80
 	python3 -m pip install .
 
 build-site: docs ## export mkdocs website to a folder

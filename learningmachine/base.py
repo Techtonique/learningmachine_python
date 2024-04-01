@@ -4,6 +4,7 @@ from functools import lru_cache
 from sklearn.base import BaseEstimator
 from rpy2.robjects.vectors import StrVector
 from rpy2.robjects.packages import importr
+from rpy2.robjects import r
 
 base = importr("base")
 stats = importr("stats")
@@ -15,12 +16,31 @@ class Base(BaseEstimator):
     Base class.
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        type=None,
+        name="Base",
+        method=None,
+        pi_method=None,
+        level=None,
+        type_prediction_set="score",
+        B=None,
+        params=None,
+        seed=123,
+    ):
         """
         Initialize the model.
         """
         super().__init__()
-        self.type_fit = None
+        self.name = name
+        self.type = type
+        self.method = method
+        self.pi_method = pi_method
+        self.level = level
+        self.type_prediction_set = type_prediction_set
+        self.B = B
+        self.params = params
+        self.seed = seed
         self.obj = None
 
     @lru_cache
@@ -102,7 +122,7 @@ class Base(BaseEstimator):
 
         preds = self.predict(X)
 
-        if self.type_fit == "classification":
+        if self.type == "classification":
 
             if scoring is None:
                 scoring = "accuracy"
@@ -144,7 +164,7 @@ class Base(BaseEstimator):
 
             return scoring_options[scoring](y, preds, **kwargs)
 
-        if self.type_fit == "regression":
+        if self.type == "regression":
 
             if (
                 type(preds) == tuple
