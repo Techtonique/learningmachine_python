@@ -24,15 +24,20 @@ def check_r_installed():
 
     elif current_platform in ("Darwin", "Linux"):
         # Check if R is installed on Linux by checking if the 'R' executable is available
-        
-        if len(subprocess.run(["which", "R"], capture_output=True, text=True).stdout) > 0:
+
+        try:
+            # Try to find the 'R' executable using 'which' (if available)
+            subprocess.check_call(['which', 'R'])
             print(f"R is already installed on {current_platform}.")
             return True
-        else:
+        except subprocess.CalledProcessError:
+            # 'which' might not be available, or R is not installed
+            print('R may not be installed.')
             install_r(prompt=True) 
             return True           
-
+                
     else:
+        
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
         return False
 
