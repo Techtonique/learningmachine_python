@@ -47,7 +47,7 @@ def install_r(prompt=False):
 
     current_platform = platform.system()
 
-    if prompt:
+    if prompt == True:
         choice = input("Would you like to install R? (yes/no): ").strip().lower()
         if choice == 'yes':
             print("Installing R...")    
@@ -170,6 +170,8 @@ if not check_r_installed():
 else:
     print("R is already installed.")
 
+load_learningmachine()
+
 from os import path
 import platform
 from setuptools import setup, find_packages
@@ -179,15 +181,6 @@ from rpy2.robjects.vectors import StrVector
 from rpy2.robjects import r
 
 base = importr("base")
-
-# 3 - check if R is installed -----------------------------------------------
-        
-if not check_r_installed():
-    install_r()
-else:
-    print("R is already installed.")
-
-load_learningmachine()
 
 # 4 - Package setup -----------------------------------------------
     
