@@ -2,6 +2,8 @@
 
 import platform 
 import subprocess
+from os import path
+from setuptools import setup, find_packages
 
 # 0 - utility functions -----------------------------------------------
 
@@ -154,23 +156,19 @@ try:
     subprocess.run(["pip", "install", "setuptools"])
 except ModuleNotFoundError as e:
     print("Error installing setuptools. Please install setuptools manually.")
-        
+
+from rpy2.robjects.packages import importr
+from rpy2.robjects.vectors import StrVector
+from rpy2.robjects import r
+
+base = importr("base")
+
 if not check_r_installed():
     install_r()
 else:
     print("R is already installed.")
 
 load_learningmachine()
-
-from os import path
-import platform
-from setuptools import setup, find_packages
-import subprocess
-from rpy2.robjects.packages import importr
-from rpy2.robjects.vectors import StrVector
-from rpy2.robjects import r
-
-base = importr("base")
 
 # 4 - Package setup -----------------------------------------------
     
