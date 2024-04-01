@@ -20,11 +20,11 @@ class Base(BaseEstimator):
         self,
         type=None,
         name="Base",
-        method=None,
-        pi_method=None,
-        level=None,
+        method="ranger",
+        pi_method="kdesplitconformal",
+        level=95,
         type_prediction_set="score",
-        B=None,
+        B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
         activ = "relu",
@@ -173,7 +173,11 @@ class Base(BaseEstimator):
                 "roc_auc": skm.roc_auc_score,
             }
 
-            return scoring_options[scoring](y, preds, **kwargs)
+            try:
+                preds = preds.ravel().astype(int)
+                return scoring_options[scoring](y, preds, **kwargs)
+            except:
+                return scoring_options[scoring](y, preds, **kwargs)
 
         if self.type == "regression":
 

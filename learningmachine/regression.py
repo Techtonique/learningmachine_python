@@ -19,10 +19,9 @@ class Regressor(Base, RegressorMixin):
     def __init__(
             self,
         method="ranger",
-        pi_method=None,
-        level=None,
-        type_prediction_set="score",
-        B=None,
+        pi_method="kdesplitconformal",
+        level=95,
+        B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
         activ = "relu",
@@ -37,7 +36,6 @@ class Regressor(Base, RegressorMixin):
             method=method,
             pi_method=pi_method,
             level=level,
-            type_prediction_set=type_prediction_set,
             B=B,
             nb_hidden=nb_hidden,
             nodes_sim=nodes_sim,
@@ -48,44 +46,20 @@ class Regressor(Base, RegressorMixin):
         try:
             self.load_learningmachine()
             self.obj = r(
-                f"learningmachine::Regressor$new(method = {format_value(self.method)},
-                                                pi_method = {format_value(self.pi_method)},
-                                                level = {format_value(self.level)},
-                                                type_prediction_set = {format_value(self.type_prediction_set)},
-                                                B = {format_value(self.B)},
-                                                nb_hidden = {format_value(self.nb_hidden)},
-                                                nodes_sim = {format_value(self.nodes_sim)},
-                                                activ = {format_value(self.activ)},
-                                                seed = {format_value(self.seed)})"
+                f"learningmachine::Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
             )
         except NotImplementedError as e:
             try:
                 r.library("learningmachine")
                 self.obj = r(
-                    f"Regressor$new(method = {format_value(self.method)}, 
-                                    pi_method = {format_value(self.pi_method)},
-                                    level = {format_value(self.level)},
-                                    type_prediction_set = {format_value(self.type_prediction_set)},
-                                    B = {format_value(self.B)},
-                                    nb_hidden = {format_value(self.nb_hidden)},
-                                    nodes_sim = {format_value(self.nodes_sim)},
-                                    activ = {format_value(self.activ)},
-                                    seed = {format_value(self.seed)})"
+                    f"Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
                 )
             except NotImplementedError as e:
                 try:
                     self.obj = r(
                         f"""
                                  library(learningmachine); 
-                                 Regressor$new(method = {format_value(self.method)},
-                                               pi_method = {format_value(self.pi_method)},
-                                               level = {format_value(self.level)},
-                                               type_prediction_set = {format_value(self.type_prediction_set)},
-                                               B = {format_value(self.B)},
-                                               nb_hidden = {format_value(self.nb_hidden)},
-                                               nodes_sim = {format_value(self.nodes_sim)},
-                                               activ = {format_value(self.activ)},
-                                               seed = {format_value(self.seed)})
+                                 Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})
                                  """
                     )
                 except NotImplementedError as e:

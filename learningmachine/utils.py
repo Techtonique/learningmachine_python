@@ -64,4 +64,11 @@ def check_install_r_pkg():
 
 # Formatting object as a string
 def format_value(value):
-    return f"'{value}'"
+    if value is None:
+        return f"NULL"
+    if isinstance(value, str):
+        return f'"{value}"'
+    if isinstance(value, bool):
+        return f"{str(value).upper()}"
+    if isinstance(value, int) or isinstance(value, float):
+        return f"{value}"
