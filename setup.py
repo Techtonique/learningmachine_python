@@ -16,7 +16,8 @@ def check_r_installed():
             print("R is already installed on Windows.")
             return True
         except:
-            install_r(prompt=True)            
+            install_r(prompt=True)
+            return True            
 
     elif current_platform == "Linux":
         # Check if R is installed on Linux by checking if the 'R' executable is available
@@ -25,7 +26,8 @@ def check_r_installed():
             print("R is already installed on Linux.")
             return True
         except:
-            install_r(prompt=True)            
+            install_r(prompt=True) 
+            return True           
 
     elif current_platform == "Darwin":  # macOS
         # Check if R is installed on macOS by checking if the 'R' executable is available
@@ -34,7 +36,8 @@ def check_r_installed():
             print("R is already installed on macOS.")
             return True
         except:
-            install_r(prompt=True)            
+            install_r(prompt=True)   
+            return True         
 
     else:
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
