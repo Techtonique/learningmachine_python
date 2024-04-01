@@ -15,7 +15,7 @@ def check_r_installed():
             )
             print("R is already installed on Windows.")
             return True
-        except:
+        except subprocess.CalledProcessError as e:
             install_r(prompt=True)
             return True            
 
@@ -25,7 +25,7 @@ def check_r_installed():
             subprocess.run(["which", "R"], check=True)
             print("R is already installed on Linux.")
             return True
-        except:
+        except subprocess.CalledProcessError as e:
             install_r(prompt=True) 
             return True           
 
@@ -35,7 +35,7 @@ def check_r_installed():
             subprocess.run(["which", "R"], check=True)
             print("R is already installed on macOS.")
             return True
-        except:
+        except subprocess.CalledProcessError as e:
             install_r(prompt=True)   
             return True         
 
