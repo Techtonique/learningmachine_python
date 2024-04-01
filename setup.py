@@ -1,26 +1,8 @@
 #!/usr/bin/env python
 
-# 1 - import Python packages -----------------------------------------------
+import platform 
 
-import subprocess
-
-subprocess.run(["pip", "install", "rpy2"])
-try: 
-    subprocess.run(["pip", "install", "setuptools"])
-except ModuleNotFoundError as e:
-    print("Error installing setuptools. Please install setuptools manually.")
-
-from os import path
-import platform
-from setuptools import setup, find_packages
-import subprocess
-from rpy2.robjects.packages import importr
-from rpy2.robjects.vectors import StrVector
-from rpy2.robjects import r
-
-base = importr("base")
-
-# 2 - utility functions -----------------------------------------------
+# 0 - utility functions -----------------------------------------------
 
 def check_r_installed():
     current_platform = platform.system()
@@ -33,11 +15,8 @@ def check_r_installed():
             )
             print("R is already installed on Windows.")
             return True
-        except subprocess.CalledProcessError:
-            print(
-                "R is required but not installed on Windows (check manually: https://cloud.r-project.org/)."
-            )
-            return False
+        except:
+            install_r(prompt=True)            
 
     elif current_platform == "Linux":
         # Check if R is installed on Linux by checking if the 'R' executable is available
@@ -45,11 +24,8 @@ def check_r_installed():
             subprocess.run(["which", "R"], check=True)
             print("R is already installed on Linux.")
             return True
-        except subprocess.CalledProcessError:
-            print(
-                "R is required but not installed on Linux (check manually: https://cloud.r-project.org/)."
-            )
-            return False
+        except:
+            install_r(prompt=True)            
 
     elif current_platform == "Darwin":  # macOS
         # Check if R is installed on macOS by checking if the 'R' executable is available
@@ -57,18 +33,27 @@ def check_r_installed():
             subprocess.run(["which", "R"], check=True)
             print("R is already installed on macOS.")
             return True
-        except subprocess.CalledProcessError:
-            print(
-                "R is required but not installed on macOS (check manually: https://cloud.r-project.org/)."
-            )
-            return False
+        except:
+            install_r(prompt=True)            
 
     else:
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
         return False
 
-def install_r():
+def install_r(prompt=False):
+
     current_platform = platform.system()
+
+    if prompt:
+        choice = input("Would you like to install R? (yes/no): ").strip().lower()
+        if choice == 'yes':
+            print("Installing R...")    
+        elif choice == 'no':
+            print("No problem. R will not be installed.")
+            return 
+        else:
+            print("Invalid input. Please enter 'yes' or 'no'.")
+            return
 
     if current_platform == "Windows":
         # Install R on Windows using PowerShell
@@ -122,13 +107,31 @@ def load_learningmachine():
             'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
             'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
         ]
+        commands3 = [
+            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(remotes::install_github("Techtonique/learningmachine"), silent=FALSE)',
+        ]
+        commands4 = [
+            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
+            'try(remotes::install_github("Techtonique/learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+        ]
+
         try:
             for cmd in commands1:
                 subprocess.run(["Rscript", "-e", cmd])
         except NotImplementedError as e:  # can't install packages globally
-            subprocess.run(["mkdir", "learningmachine_r"])
-            for cmd in commands2:
-                subprocess.run(["Rscript", "-e", cmd])
+            try: 
+                subprocess.run(["mkdir", "learningmachine_r"])
+                for cmd in commands2:
+                    subprocess.run(["Rscript", "-e", cmd])
+            except NotImplementedError as e:
+                try: 
+                    for cmd in commands3:
+                        subprocess.run(["Rscript", "-e", cmd])
+                except NotImplementedError as e:
+                    subprocess.run(["mkdir", "learningmachine_r"])
+                    for cmd in commands4:
+                        subprocess.run(["Rscript", "-e", cmd])
 
         try:
             base.library(StrVector(["learningmachine"]))
@@ -148,6 +151,31 @@ def load_learningmachine():
                     r(
                         "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
                     )
+
+# 1 - import Python packages -----------------------------------------------
+
+import subprocess
+
+subprocess.run(["pip", "install", "rpy2"])
+try: 
+    subprocess.run(["pip", "install", "setuptools"])
+except ModuleNotFoundError as e:
+    print("Error installing setuptools. Please install setuptools manually.")
+        
+if not check_r_installed():
+    install_r()
+else:
+    print("R is already installed.")
+
+from os import path
+import platform
+from setuptools import setup, find_packages
+import subprocess
+from rpy2.robjects.packages import importr
+from rpy2.robjects.vectors import StrVector
+from rpy2.robjects import r
+
+base = importr("base")
 
 # 3 - check if R is installed -----------------------------------------------
         
