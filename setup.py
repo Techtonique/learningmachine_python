@@ -115,20 +115,32 @@ def load_learningmachine():
 
         try:
             for cmd in commands1:
-                subprocess.run(["Rscript", "-e", cmd])
+                try: 
+                    subprocess.run(["Rscript", "-e", cmd])
+                except:
+                    pass
         except NotImplementedError as e:  # can't install packages globally
             try: 
                 subprocess.run(["mkdir", "learningmachine_r"])
                 for cmd in commands2:
-                    subprocess.run(["Rscript", "-e", cmd])
+                    try: 
+                        subprocess.run(["Rscript", "-e", cmd])
+                    except:
+                        pass
             except NotImplementedError as e:
                 try: 
                     for cmd in commands3:
-                        subprocess.run(["Rscript", "-e", cmd])
+                        try: 
+                            subprocess.run(["Rscript", "-e", cmd])
+                        except:
+                            pass
                 except NotImplementedError as e:
                     subprocess.run(["mkdir", "learningmachine_r"])
                     for cmd in commands4:
-                        subprocess.run(["Rscript", "-e", cmd])
+                        try: 
+                            subprocess.run(["Rscript", "-e", cmd])
+                        except:
+                            pass
 
         try:
             base.library(StrVector(["learningmachine"]))
