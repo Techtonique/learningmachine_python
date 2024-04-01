@@ -48,20 +48,44 @@ class Regressor(Base, RegressorMixin):
         try:
             self.load_learningmachine()
             self.obj = r(
-                f"learningmachine::Regressor$new(method = {format_value(self.method)})"
+                f"learningmachine::Regressor$new(method = {format_value(self.method)},
+                                                pi_method = {format_value(self.pi_method)},
+                                                level = {format_value(self.level)},
+                                                type_prediction_set = {format_value(self.type_prediction_set)},
+                                                B = {format_value(self.B)},
+                                                nb_hidden = {format_value(self.nb_hidden)},
+                                                nodes_sim = {format_value(self.nodes_sim)},
+                                                activ = {format_value(self.activ)},
+                                                seed = {format_value(self.seed)})"
             )
         except NotImplementedError as e:
             try:
                 r.library("learningmachine")
                 self.obj = r(
-                    f"Regressor$new(method = {format_value(self.method)})"
+                    f"Regressor$new(method = {format_value(self.method)}, 
+                                    pi_method = {format_value(self.pi_method)},
+                                    level = {format_value(self.level)},
+                                    type_prediction_set = {format_value(self.type_prediction_set)},
+                                    B = {format_value(self.B)},
+                                    nb_hidden = {format_value(self.nb_hidden)},
+                                    nodes_sim = {format_value(self.nodes_sim)},
+                                    activ = {format_value(self.activ)},
+                                    seed = {format_value(self.seed)})"
                 )
             except NotImplementedError as e:
                 try:
                     self.obj = r(
                         f"""
                                  library(learningmachine); 
-                                 Regressor$new(method = {format_value(self.method)})
+                                 Regressor$new(method = {format_value(self.method)},
+                                               pi_method = {format_value(self.pi_method)},
+                                               level = {format_value(self.level)},
+                                               type_prediction_set = {format_value(self.type_prediction_set)},
+                                               B = {format_value(self.B)},
+                                               nb_hidden = {format_value(self.nb_hidden)},
+                                               nodes_sim = {format_value(self.nodes_sim)},
+                                               activ = {format_value(self.activ)},
+                                               seed = {format_value(self.seed)})
                                  """
                     )
                 except NotImplementedError as e:
