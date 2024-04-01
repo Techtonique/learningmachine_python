@@ -147,24 +147,24 @@ def load_learningmachine():
                         except:
                             pass
 
-        try:
-            base.library(StrVector(["learningmachine"]))
-        except (
-            NotImplementedError
-        ) as e1:  # can't load the package from the global environment
-            try:
-                base.library(
-                    StrVector(["learningmachine"]), lib_loc="learningmachine_r"
-                )
-            except NotImplementedError as e2:  # well, we tried
-                try:
-                    r("try(library('learningmachine'), silence=TRUE)")
-                except (
-                    NotImplementedError
-                ) as e3:  # well, we tried everything at this point
-                    r(
-                        "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
-                    )
+        # try:
+        #     base.library(StrVector(["learningmachine"]))
+        # except (
+        #     NotImplementedError
+        # ) as e1:  # can't load the package from the global environment
+        #     try:
+        #         base.library(
+        #             StrVector(["learningmachine"]), lib_loc="learningmachine_r"
+        #         )
+        #     except NotImplementedError as e2:  # well, we tried
+        #         try:
+        #             r("try(library('learningmachine'), silence=TRUE)")
+        #         except (
+        #             NotImplementedError
+        #         ) as e3:  # well, we tried everything at this point
+        #             r(
+        #                 "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+        #             )
 
 # 1 - import Python packages -----------------------------------------------
 
