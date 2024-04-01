@@ -10,8 +10,7 @@ from math import sqrt
 
 
 # 1. Regression
-
-fit_obj = lm.BaseRegressor()
+fit_obj = lm.Regressor(method="ranger")
 diabetes = load_diabetes()
 X = diabetes.data[:150]
 y = diabetes.target[:150]
@@ -23,16 +22,10 @@ start = time()
 fit_obj.fit(X_train, y_train)
 print("Elapsed time: ", time() - start)
 
-print(dir(fit_obj))
-print(fit_obj.get_params())
-print(fit_obj.type_fit)
-print(fit_obj.obj)
-
-
 ## Compute RMSE
 rms1 = sqrt(mean_squared_error(y_test, fit_obj.predict(X_test)))
 print(rms1)
 
-print(np.sqrt(fit_obj.score(X_test, y_test)))
+print(fit_obj.score(X_test, y_test))
 
-print(np.sqrt(-cross_val_score(fit_obj, X, y, cv=5, scoring='neg_mean_squared_error')))
+print(-cross_val_score(fit_obj, X, y, cv=5, scoring='neg_root_mean_squared_error'))

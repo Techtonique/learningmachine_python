@@ -1,111 +1,37 @@
-name: Python publish
+name: Publish Python 🐍 distribution 📦 to PyPI
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - master  # Replace with your branch name
 
 jobs:
-  ubuntu-run:
+  publish:
     runs-on: ubuntu-latest
 
-    services:
-      r:
-        image: rocker/r-ver:4.1.2
-        ports:
-          - 6311:6311
-        options: --name=r-service
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: '3.x'  # Replace with your Python version
 
-      - name: Install R Dependencies
+      - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y r-base
-          sudo apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev  
-          mkdir learningmachine_r
-          Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
-          Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
+          python3 -m pip install --upgrade pip
+          pip install wheel setuptools twine
 
-      - name: Install Python Dependencies
-        run: |     
-          python -m ensurepip --default-pip
-          python -m pip install --upgrade pip       
-          python -m pip list
-          python -m pip install setuptools rpy2
-          python -m pip install numpy pandas scikit-learn scipy
-          python -m pip install wheel
-          python -m pip install .  --verbose
+      - name: Build distribution
+        run: python setup.py sdist bdist_wheel
 
-      - name: Debug Info
-        run: |
-          python --version
-          python -m pip list
-          python -m pip freeze
-          Rscript --version
-          ls -la 
+      - name: Run examples 
+        run: pip install .&&find examples -maxdepth 2 -name "*.py" -exec  python3 {} \;
 
-      - name: Build Distribution Packages
-        run: |
-          python3 -m pip install setuptools
-          python setup.py sdist bdist_wheel
-          ls -l dist
-
-      - name: Run Python Examples from Subdirectory
-        run: |
-          find examples -maxdepth 2 -name "*.py" -exec  python {} \;
-
-      #- name: Publish to PyPI                
-      #  uses: pypa/gh-action-pypi-publish@release/v1
-      #  with: 
-      #      password: ${{ secrets.PYPI_GLOBAL2 }}
-      #      repository-url: https://upload.pypi.org/legacy/
-
-  macos-run:
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Publish to PyPI                
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          python-version: 3.9
-
-      - name: Debug Info for macOS
-        run: |
-          python --version
-          ls -la
-      
-      - name: Install R Dependencies
-        run: |
-          brew install r 
-          mkdir learningmachine_r
-          Rscript -e "try(install.packages(c('R6', 'Rcpp', 'skimr'), lib='./learningmachine_r', dependencies=TRUE, repos='https://cloud.r-project.org'), silent=TRUE)"        
-          Rscript -e "try(utils::install.packages('learningmachine', lib='./learningmachine_r', repos='https://techtonique.r-universe.dev', dependencies = TRUE), silent=TRUE)"
-  
-      - name: Install Python Dependencies
-        run: |                 
-            python -m ensurepip --default-pip
-            python -m pip install --upgrade pip       
-            python -m pip list
-            python -m pip install setuptools rpy2
-            python -m pip install numpy pandas scikit-learn scipy
-            python -m pip install wheel
-            python -m pip install .  --verbose
-
-      - name: Run Python Examples from Subdirectory on macOS
-        run: |
-          find examples -maxdepth 2 -name "*.py" -exec  python {} \;
-        
+          password: ${{ secrets.PYPI_GLOBAL2 }}
+          repository-url: https://upload.pypi.org/legacy/
