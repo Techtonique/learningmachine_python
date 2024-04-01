@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import platform 
+import subprocess
 
 # 0 - utility functions -----------------------------------------------
 
@@ -19,25 +20,15 @@ def check_r_installed():
             install_r(prompt=True)
             return True            
 
-    elif current_platform == "Linux":
+    elif current_platform in ("Darwin", "Linux"):
         # Check if R is installed on Linux by checking if the 'R' executable is available
-        try:
-            subprocess.run(["which", "R"], check=True)
-            print("R is already installed on Linux.")
+        
+        if len(subprocess.run(["which", "R"], capture_output=True, text=True).stdout) > 0:
+            print(f"R is already installed on {current_platform}.")
             return True
-        except subprocess.CalledProcessError as e:
+        else:
             install_r(prompt=True) 
             return True           
-
-    elif current_platform == "Darwin":  # macOS
-        # Check if R is installed on macOS by checking if the 'R' executable is available
-        try:
-            subprocess.run(["which", "R"], check=True)
-            print("R is already installed on macOS.")
-            return True
-        except subprocess.CalledProcessError as e:
-            install_r(prompt=True)   
-            return True         
 
     else:
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
@@ -48,15 +39,16 @@ def install_r(prompt=False):
     current_platform = platform.system()
 
     if prompt == True:
-        choice = input("Would you like to install R? (yes/no): ").strip().lower()
-        if choice == 'yes':
-            print("Installing R...")    
-        elif choice == 'no':
-            print("No problem. R will not be installed.")
-            return 
-        else:
-            print("Invalid input. Please enter 'yes' or 'no'.")
-            return
+        print("Installing R...")    
+        # choice = input("Would you like to install R? (yes/no): ").strip().lower()
+        # if choice == 'yes':
+        #     print("Installing R...")    
+        # elif choice == 'no':
+        #     print("No problem. R will not be installed.")
+        #     return 
+        # else:
+        #     print("Invalid input. Please enter 'yes' or 'no'.")
+        #     return
 
     if current_platform == "Windows":
         # Install R on Windows using PowerShell
@@ -156,8 +148,6 @@ def load_learningmachine():
                     )
 
 # 1 - import Python packages -----------------------------------------------
-
-import subprocess
 
 subprocess.run(["pip", "install", "rpy2"])
 try: 
