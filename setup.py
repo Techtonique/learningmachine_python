@@ -37,7 +37,7 @@ def check_r_installed():
             return True           
                 
     else:
-        
+
         print("Unsupported platform (check manually: https://cloud.r-project.org/)")
         return False
 
@@ -102,24 +102,24 @@ def load_learningmachine():
     ):  # kind of convoluted, but works
         print("Installing R packages along with 'learningmachine'...")
         commands1 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
+            'try(utils::install.packages("learningmachine", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
         ]
         commands2 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
+            'try(utils::install.packages("learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=TRUE)',
         ]
         commands3 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(remotes::install_github("Techtonique/learningmachine"), silent=FALSE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
+            'try(remotes::install_github("Techtonique/learningmachine"), silent=TRUE)',
         ]
         commands4 = [
-            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=FALSE)',
-            'try(remotes::install_github("Techtonique/learningmachine", lib="./learningmachine_r", repos="https://techtonique.r-universe.dev", dependencies = TRUE), silent=FALSE)',
+            'try(utils::install.packages(c("R6", "Rcpp", "remotes", "skimr"), lib="./learningmachine_r", repos="https://cloud.r-project.org", dependencies = TRUE), silent=TRUE)',
+            'try(remotes::install_github("Techtonique/learningmachine", lib="./learningmachine_r", dependencies = TRUE), silent=TRUE)',
         ]
 
         try:
-            for cmd in commands1:
+            for cmd in commands3:
                 try: 
                     subprocess.run(["Rscript", "-e", cmd])
                 except:
@@ -127,21 +127,21 @@ def load_learningmachine():
         except NotImplementedError as e:  # can't install packages globally
             try: 
                 subprocess.run(["mkdir", "learningmachine_r"])
-                for cmd in commands2:
+                for cmd in commands4:
                     try: 
                         subprocess.run(["Rscript", "-e", cmd])
                     except:
                         pass
             except NotImplementedError as e:
                 try: 
-                    for cmd in commands3:
+                    for cmd in commands1:
                         try: 
                             subprocess.run(["Rscript", "-e", cmd])
                         except:
                             pass
                 except NotImplementedError as e:
                     subprocess.run(["mkdir", "learningmachine_r"])
-                    for cmd in commands4:
+                    for cmd in commands2:
                         try: 
                             subprocess.run(["Rscript", "-e", cmd])
                         except:
