@@ -23,28 +23,28 @@ class Regressor(Base, RegressorMixin):
         level=None,
         type_prediction_set="score",
         B=None,
+        nb_hidden = 0,
+        nodes_sim = "sobol",
+        activ = "relu",
         seed=123,
     ):
         """
         Initialize the model.
         """
         super().__init__(
+            name = "Regressor",
+            type = "regression",
             method=method,
             pi_method=pi_method,
             level=level,
             type_prediction_set=type_prediction_set,
             B=B,
+            nb_hidden=nb_hidden,
+            nodes_sim=nodes_sim,
+            activ=activ,
             seed=seed,
         )
-        self.name = "Regressor"
-        self.type = "regression"
-        self.method = method
-        self.pi_method = pi_method
-        self.level = level
-        self.type_prediction_set = type_prediction_set
-        self.B = B
-        self.seed = seed
-
+        
         try:
             self.load_learningmachine()
             self.obj = r(

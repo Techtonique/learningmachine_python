@@ -25,6 +25,9 @@ class Base(BaseEstimator):
         level=None,
         type_prediction_set="score",
         B=None,
+        nb_hidden = 0,
+        nodes_sim = "sobol",
+        activ = "relu",
         params=None,
         seed=123,
     ):
@@ -38,7 +41,15 @@ class Base(BaseEstimator):
         self.pi_method = pi_method
         self.level = level
         self.type_prediction_set = type_prediction_set
-        self.B = B
+        self.B = B        
+        self.nb_hidden = nb_hidden
+        assert nodes_sim in ("sobol", "halton", "unif"), \
+            "must have nodes_sim in ('sobol', 'halton', 'unif')"
+        self.nodes_sim = "sobol"
+        assert activ in ("relu", "sigmoid", "tanh",
+                             "leakyrelu", "elu", "linear"), \
+                            "must have activ in ('relu', 'sigmoid', 'tanh', 'leakyrelu', 'elu', 'linear')"
+        self.activ = activ 
         self.params = params
         self.seed = seed
         self.obj = None
