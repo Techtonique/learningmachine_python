@@ -20,6 +20,8 @@ If R is not installed automatically when running `pip`, [install it manually](ht
 
 ## Example
 
+See also [this notebook](https://colab.research.google.com/github/Techtonique/learningmachine_python/blob/main/learningmachine/demo/thierrymoudiki_20240401_calib.ipynb)
+
 ```python
 import learningmachine as lm
 
