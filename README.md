@@ -1,5 +1,7 @@
 # learningmachine 
 
+[![Downloads](https://static.pepy.tech/badge/learningmachine)](https://pepy.tech/project/learningmachine)
+
 Machine Learning with uncertainty quantification and interpretability.
 
 ## Install
