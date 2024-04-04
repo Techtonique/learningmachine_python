@@ -1,6 +1,7 @@
 # learningmachine 
 
-[![Downloads](https://static.pepy.tech/badge/learningmachine)](https://pepy.tech/project/learningmachine)
+![PyPI](https://img.shields.io/pypi/v/learningmachine) [![PyPI - License](https://img.shields.io/pypi/l/learningmachine)](https://github.com/thierrymoudiki/learningmachine/blob/master/LICENSE) [![Downloads](https://pepy.tech/badge/learningmachine)](https://pepy.tech/project/learningmachine) 
+
 
 Machine Learning with uncertainty quantification and interpretability.
 
