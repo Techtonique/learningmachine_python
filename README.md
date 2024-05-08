@@ -23,7 +23,9 @@ If R packages are not installed automatically when running `pip`, [install it ma
 
 ## Example
 
-See also [this notebook](https://colab.research.google.com/github/Techtonique/learningmachine_python/blob/main/learningmachine/demo/thierrymoudiki_20240401_calib.ipynb)
+See also:
+- [this notebook](https://colab.research.google.com/github/Techtonique/learningmachine_python/blob/main/learningmachine/demo/thierrymoudiki_20240401_calib.ipynb)
+- [this notebook](https://colab.research.google.com/github/Techtonique/learningmachine_python/blob/main/learningmachine/demo/thierrymoudiki_20240508_calib.ipynb)
 
 ```python
 import learningmachine as lm
