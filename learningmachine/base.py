@@ -2,9 +2,17 @@ import sklearn.metrics as skm
 import subprocess
 from functools import lru_cache
 from sklearn.base import BaseEstimator
-from rpy2.robjects.vectors import StrVector
+from rpy2.robjects.vectors import (
+    StrVector,
+    FloatMatrix,
+    FloatVector,
+    IntVector,
+    FactorVector,
+)
 from rpy2.robjects.packages import importr
 from rpy2.robjects import r
+from rpy2 import RRuntimeError
+from rpy2.robjects import NULL as rNULL
 
 base = importr("base")
 stats = importr("stats")
@@ -207,3 +215,64 @@ class Base(BaseEstimator):
             }
 
             return scoring_options[scoring](y, preds, **kwargs)
+
+    def summary(self, X, y,                                 
+                class_index = None,   
+                level = 95,
+                show_progress = True,                                             
+                cl = None):
+                
+        if cl is None:
+
+            if self.type == "classification":
+
+                assert class_index is not None, "class_index must be provided for classification models"      
+
+                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                                                byrow=True,
+                                                ncol=X.shape[1],
+                                                nrow=X.shape[0]),
+                                    y = FactorVector(IntVector(y)),
+                                    class_index = class_index + 1,
+                                    level = level,
+                                    show_progress = show_progress                                                                   
+                )
+            
+            else: # regression
+
+                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                                                byrow=True,
+                                                ncol=X.shape[1],
+                                                nrow=X.shape[0]),
+                                    y = FloatVector(y),
+                                    level = level,
+                                    show_progress = show_progress
+                ) 
+        else: # cl is not None, parallel computing
+
+            if self.type == "classification":
+
+                assert class_index is not None, "class_index must be provided for classification models"      
+                
+                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                                                byrow=True,
+                                                ncol=X.shape[1],
+                                                nrow=X.shape[0]),
+                                    y = FactorVector(IntVector(y)),
+                                    level = level,
+                                    show_progress = show_progress,
+                                    class_index = class_index + 1,
+                                    cl = cl
+                )
+            
+            else: # regression
+
+                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                                                byrow=True,
+                                                ncol=X.shape[1],
+                                                nrow=X.shape[0]),
+                                    y = FloatVector(y),
+                                    level = level,
+                                    show_progress = show_progress,
+                                    cl = cl
+                )

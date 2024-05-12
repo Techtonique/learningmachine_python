@@ -69,26 +69,37 @@ def install_r():
         print("Unsupported platform. Unable to install R.")
 
 def install_packages():
-    try:	
-        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
-        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
-        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
-    except: 	
-        try: 
+    try: 
+        subprocess.run(["Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+    except:
+        try:
             subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
-            subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
-            subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
-            subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"])
-        except:
+            subprocess.run(["Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
+            subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
+            subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"]) 
+        except:             
             try:	
                 subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
                 subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
-                subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine')"])
+                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
             except: 	
-                subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
-                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
-                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
-                subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
+                try: 
+                    subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
+                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
+                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
+                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"])
+                except:
+                    try:	
+                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
+                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
+                        subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine')"])
+                    except: 	
+                        subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
+                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
+                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
+                        subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
 
 
 # Check if R is installed; if not, install it
@@ -134,6 +145,6 @@ setup(
     packages=find_packages(include=["learningmachine", "learningmachine.*"]),
     test_suite="tests",
     url="https://github.com/Techtonique/learningmachine_python",
-    version="1.1.2",
+    version="1.2.0",
     zip_safe=False,
 )
