@@ -11,7 +11,6 @@ from rpy2.robjects.vectors import (
 )
 from rpy2.robjects.packages import importr
 from rpy2.robjects import r
-from rpy2 import RRuntimeError
 from rpy2.robjects import NULL as rNULL
 
 base = importr("base")
