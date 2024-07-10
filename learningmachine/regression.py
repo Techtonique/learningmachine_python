@@ -19,7 +19,7 @@ class Regressor(Base, RegressorMixin):
     def __init__(
             self,
         method="ranger",
-        pi_method="kdesplitconformal",
+        pi_method="none",
         level=95,
         B=100,
         nb_hidden = 0,
@@ -69,17 +69,16 @@ class Regressor(Base, RegressorMixin):
         """
         Fit the model according to the given training data.
         """        
-        d = {}
+        params_dict = {}
         for k, v in kwargs.items():
-            d[k.replace('_', '.')] = v
+            params_dict[k.replace('_', '.')] = v
         self.obj["fit"](
             r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
                        nrow=X.shape[0]),
             FloatVector(y), 
-            **d
-            
+            **params_dict            
         )
         return self
 

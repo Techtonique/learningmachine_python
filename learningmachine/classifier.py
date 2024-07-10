@@ -10,7 +10,7 @@ from rpy2.robjects.vectors import (
 )
 from sklearn.base import ClassifierMixin
 from .base import Base
-from .utils import format_value
+from .utils import format_value, r_list_to_namedtuple
 
 base = importr("base")
 stats = importr("stats")
@@ -25,7 +25,7 @@ class Classifier(Base, ClassifierMixin):
     def __init__(
         self,
         method="ranger",
-        pi_method="kdesplitconformal",
+        pi_method="none",
         level=95,
         type_prediction_set=None,
         B=100,
@@ -114,7 +114,7 @@ class Classifier(Base, ClassifierMixin):
         """
         Predict using the model.
         """    
-        if self.level is None:               
+        if self.pi_method == "none":               
             return (
             np.asarray(
                 self.obj["predict"](
@@ -125,13 +125,11 @@ class Classifier(Base, ClassifierMixin):
                 )
             ) - 1 
         )
-        return (
-            np.asarray(
+        return r_list_to_namedtuple(            
                 self.obj["predict"](
                     r.matrix(FloatVector(X.ravel()), 
                 byrow=True,
                 ncol=X.shape[1],
                 nrow=X.shape[0])
-                )
-            )            
+                )              
         )
