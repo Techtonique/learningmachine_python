@@ -87,6 +87,13 @@ class Regressor(Base, RegressorMixin):
         """
         Predict using the model.
         """
+        if self.pi_method == "none":
+            return(np.asarray(self.obj["predict"](
+                r.matrix(FloatVector(X.ravel()), 
+                       byrow=True,
+                       ncol=X.shape[1],
+                       nrow=X.shape[0])
+            )))
         return r_list_to_namedtuple(self.obj["predict"](
                 r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
