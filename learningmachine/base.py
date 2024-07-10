@@ -30,7 +30,6 @@ class Base(BaseEstimator):
         method="ranger",
         pi_method="kdesplitconformal",
         level=95,
-        type_prediction_set="score",
         B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
@@ -47,7 +46,6 @@ class Base(BaseEstimator):
         self.method = method
         self.pi_method = pi_method
         self.level = level
-        self.type_prediction_set = type_prediction_set
         self.B = B        
         self.nb_hidden = nb_hidden
         assert nodes_sim in ("sobol", "halton", "unif"), \
@@ -179,7 +177,7 @@ class Base(BaseEstimator):
             try:
                 preds = preds.ravel().astype(int)
                 return scoring_options[scoring](y, preds, **kwargs)
-            except:
+            except TypeError:
                 return scoring_options[scoring](y, preds, **kwargs)
 
         if self.type == "regression":

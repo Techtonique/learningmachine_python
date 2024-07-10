@@ -3,10 +3,10 @@ import sklearn.metrics as skm
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
 from rpy2.robjects.vectors import (
-    FloatMatrix,
     FloatVector,
     IntVector,
     FactorVector,
+    ListVector
 )
 from sklearn.base import ClassifierMixin
 from .base import Base
@@ -27,7 +27,7 @@ class Classifier(Base, ClassifierMixin):
         method="ranger",
         pi_method="kdesplitconformal",
         level=95,
-        type_prediction_set="score",
+        type_prediction_set=None,
         B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
@@ -42,14 +42,15 @@ class Classifier(Base, ClassifierMixin):
             type = "classification",
             method=method,
             pi_method=pi_method,
-            level=level,
-            type_prediction_set=type_prediction_set,
+            level=level,            
             B=B,
             nb_hidden=nb_hidden,
             nodes_sim=nodes_sim,
             activ=activ,
             seed=seed,
         )
+
+        self.type_prediction_set=type_prediction_set
 
         try:
             self.load_learningmachine()
@@ -73,17 +74,19 @@ class Classifier(Base, ClassifierMixin):
                 except NotImplementedError as e:
                     print("R package can't be loaded: ", e)
 
-    def fit(self, X, y):
+    def fit(self, X, y, **kwargs):
         """
         Fit the model according to the given training data.
         """
-        self.obj["fit"](
-            r.matrix(FloatVector(X.ravel()), 
+        d = {}
+        for k, v in kwargs.items():
+            d[k.replace('_', '.')] = v
+        self.obj["fit"](r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
                        nrow=X.shape[0]),
             FactorVector(IntVector(y)),
-        )
+            **d)
         self.classes_ = np.unique(y)  # /!\ do not remove
         return self
     

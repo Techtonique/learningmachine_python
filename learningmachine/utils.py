@@ -1,5 +1,7 @@
+import numpy as np 
 import subprocess
 from rpy2.robjects import r
+from collections import namedtuple
 
 
 def check_pkg_installed():
@@ -72,3 +74,13 @@ def format_value(value):
         return f"{str(value).upper()}"
     if isinstance(value, int) or isinstance(value, float):
         return f"{value}"
+    
+# R list to namedtuple
+def r_list_to_namedtuple(r_list):
+    # Extract the names from the R list
+    names = r_list.names    
+    # Define a namedtuple type based on the names in the R list
+    DescribeResult = namedtuple('DescribeResult', names)    
+    # Extract elements from the R list and create a namedtuple
+    elements = {name: np.asarray(r_list.rx2(name)) for name in names}    
+    return DescribeResult(**elements)
