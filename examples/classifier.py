@@ -16,7 +16,8 @@ for dataset in datasets:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
                                                         random_state=123)
     
-    fit_obj = lm.Classifier(method = "ranger")    
+    fit_obj = lm.Classifier(method = "ranger", 
+                            pi_method="none")    
 
     start = time()
     fit_obj.fit(X_train, y_train, num_trees = 50)
@@ -27,5 +28,5 @@ for dataset in datasets:
     print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
 
     ## Compute accuracy
-    #print(fit_obj.score(X_test, y_test))
-    #print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
+    print(fit_obj.score(X_test, y_test))
+    print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
