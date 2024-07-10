@@ -27,7 +27,7 @@ class Classifier(Base, ClassifierMixin):
         method="ranger",
         pi_method="none",
         level=95,
-        type_prediction_set=None,
+        type_prediction_set="score",
         B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
@@ -59,7 +59,7 @@ class Classifier(Base, ClassifierMixin):
             )
         except NotImplementedError as e:
             try:
-                r.library("learningmachine")
+                base.suppressWarnings(base.suppressMessages(r.library("learningmachine")))
                 self.obj = r(
                     f"Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
                 )
@@ -67,7 +67,7 @@ class Classifier(Base, ClassifierMixin):
                 try:
                     self.obj = r(
                         f"""
-                                 library(learningmachine); 
+                                 suppressWarnings(suppressMessages(library(learningmachine))); 
                                  Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})
                                  """
                     )
@@ -78,15 +78,15 @@ class Classifier(Base, ClassifierMixin):
         """
         Fit the model according to the given training data.
         """
-        d = {}
+        params_dict = {}
         for k, v in kwargs.items():
-            d[k.replace('_', '.')] = v
+            params_dict[k.replace('_', '.')] = v
         self.obj["fit"](r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
                        nrow=X.shape[0]),
             FactorVector(IntVector(y)),
-            **d)
+            **params_dict)
         self.classes_ = np.unique(y)  # /!\ do not remove
         return self
     
@@ -94,21 +94,20 @@ class Classifier(Base, ClassifierMixin):
         """
         Predict using the model.
         """    
-        if self.level is None:               
+        if self.pi_method == "none":               
             res = self.obj["predict_proba"](
                     r.matrix(FloatVector(X.ravel()), 
                 byrow=True,
                 ncol=X.shape[1],
                 nrow=X.shape[0])
                 )
-            return np.asarray(res)
-        res = self.obj["predict_proba"](
+            return np.asarray(res)        
+        return r_list_to_namedtuple(self.obj["predict_proba"](
                     r.matrix(FloatVector(X.ravel()), 
                 byrow=True,
                 ncol=X.shape[1],
                 nrow=X.shape[0])
-                )
-        return np.asarray(res[0])                                    
+                ))
 
     def predict(self, X):
         """
@@ -125,11 +124,10 @@ class Classifier(Base, ClassifierMixin):
                 )
             ) - 1 
         )
-        return r_list_to_namedtuple(            
-                self.obj["predict"](
+        return r_list_to_namedtuple(self.obj["predict"](
                     r.matrix(FloatVector(X.ravel()), 
                 byrow=True,
                 ncol=X.shape[1],
                 nrow=X.shape[0])
-                )              
-        )
+                ))            
+        
