@@ -30,7 +30,6 @@ class Base(BaseEstimator):
         method="ranger",
         pi_method="kdesplitconformal",
         level=95,
-        type_prediction_set="score",
         B=100,
         nb_hidden = 0,
         nodes_sim = "sobol",
@@ -47,7 +46,6 @@ class Base(BaseEstimator):
         self.method = method
         self.pi_method = pi_method
         self.level = level
-        self.type_prediction_set = type_prediction_set
         self.B = B        
         self.nb_hidden = nb_hidden
         assert nodes_sim in ("sobol", "halton", "unif"), \
@@ -61,7 +59,6 @@ class Base(BaseEstimator):
         self.seed = seed
         self.obj = None
 
-    @lru_cache
     def load_learningmachine(self):
         # Install R packages
         commands1_lm = 'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed
@@ -103,10 +100,10 @@ class Base(BaseEstimator):
                     )
                 except:  # well, we tried
                     try:
-                        r("try(library('learningmachine'), silence=TRUE)")
+                        r("try(suppressWarnings(suppressMessages(library('learningmachine'))), silence=TRUE)")
                     except:  # well, we tried everything at this point
                         r(
-                            "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+                            "try(suppressWarnings(suppressMessages(library('learningmachine', lib.loc='learningmachine_r'))), silence=TRUE)"
                         )
 
     def score(self, X, y, scoring=None, **kwargs):
@@ -179,7 +176,7 @@ class Base(BaseEstimator):
             try:
                 preds = preds.ravel().astype(int)
                 return scoring_options[scoring](y, preds, **kwargs)
-            except:
+            except TypeError:
                 return scoring_options[scoring](y, preds, **kwargs)
 
         if self.type == "regression":
