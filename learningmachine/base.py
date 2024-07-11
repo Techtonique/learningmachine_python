@@ -59,7 +59,6 @@ class Base(BaseEstimator):
         self.seed = seed
         self.obj = None
 
-    @lru_cache
     def load_learningmachine(self):
         # Install R packages
         commands1_lm = 'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed

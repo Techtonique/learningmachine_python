@@ -44,10 +44,11 @@ class Regressor(Base, RegressorMixin):
         )
         
         try:
-            self.load_learningmachine()
-            self.obj = r(
-                f"learningmachine::Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
-            )
+            pass 
+            #self.load_learningmachine()
+            #self.obj = r(
+            #    f"learningmachine::Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
+            #)
         except NotImplementedError as e:
             try:
                 base.suppressWarnings(base.suppressMessages(r.library("learningmachine")))
