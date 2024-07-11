@@ -101,10 +101,10 @@ class Base(BaseEstimator):
                     )
                 except:  # well, we tried
                     try:
-                        r("try(library('learningmachine'), silence=TRUE)")
+                        r("try(suppressWarnings(suppressMessages(library('learningmachine'))), silence=TRUE)")
                     except:  # well, we tried everything at this point
                         r(
-                            "try(library('learningmachine', lib.loc='learningmachine_r'), silence=TRUE)"
+                            "try(suppressWarnings(suppressMessages(library('learningmachine', lib.loc='learningmachine_r'))), silence=TRUE)"
                         )
 
     def score(self, X, y, scoring=None, **kwargs):
