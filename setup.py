@@ -73,29 +73,49 @@ def install_packages():
         subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
         subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
         subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])        
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred: {e}")
+        print(f"Return code: {e.returncode}")
+        print(f"Output: {e.output}")
+        print(f"Stderr: {e.stderr}")
         try:
             subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
             subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
             subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
             subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
-        except subprocess.CalledProcessError:            
+        except subprocess.CalledProcessError as e:    
+            print(f"Error occurred: {e}")
+            print(f"Return code: {e.returncode}")
+            print(f"Output: {e.output}")
+            print(f"Stderr: {e.stderr}")        
             try:	
                 subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
                 subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
                 subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])        
-            except subprocess.CalledProcessError:	
+            except subprocess.CalledProcessError as e:	
+                print(f"Error occurred: {e}")
+                print(f"Return code: {e.returncode}")
+                print(f"Output: {e.output}")
+                print(f"Stderr: {e.stderr}")        
                 try: 
                     subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
                     subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
                     subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
                     subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
-                except subprocess.CalledProcessError:
+                except subprocess.CalledProcessError as e:
+                    print(f"Error occurred: {e}")
+                    print(f"Return code: {e.returncode}")
+                    print(f"Output: {e.output}")
+                    print(f"Stderr: {e.stderr}")        
                     try:	
                         subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
                         subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
                         subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])
-                    except subprocess.CalledProcessError:	
+                    except subprocess.CalledProcessError as e:	
+                        print(f"Error occurred: {e}")
+                        print(f"Return code: {e.returncode}")
+                        print(f"Output: {e.output}")
+                        print(f"Stderr: {e.stderr}")        
                         subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
                         subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
                         subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
