@@ -70,36 +70,40 @@ def install_r():
 
 def install_packages():
     try: 
-        subprocess.run(["Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
         subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
-        subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+        #subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+        subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])        
     except:
         try:
             subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
-            subprocess.run(["Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
+            subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
             subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
-            subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"]) 
+            #subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"]) 
+            subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
         except:             
             try:	
-                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
-                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
-                subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+                subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
+                subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
+                #subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', dependencies=TRUE)"])
+                subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])        
             except: 	
                 try: 
                     subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
-                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
-                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
-                    subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"])
+                    subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
+                    subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
+                    #subprocess.run(["Rscript", "-e", "utils::install.packages('learningmachine', repos='https://techtonique.r-universe.dev', lib='r-learningmachine', dependencies=TRUE)"])
+                    subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
                 except:
                     try:	
-                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, dependencies=TRUE)"])
-                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
-                        subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine')"])
+                        subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', dependencies=TRUE)"])
+                        subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), dependencies=TRUE)"])
+                        subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine')"])
                     except: 	
                         subprocess.run(["mkdir", "-p", "r-learningmachine"])		 
-                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(devtools, lib='r-learningmachine', dependencies=TRUE)"])
-                        subprocess.run(["sudo", "Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
-                        subprocess.run(["sudo", "Rscript", "-e", "devtools::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
+                        subprocess.run(["Rscript", "-e", "utils::install.packages('remotes', lib='r-learningmachine', dependencies=TRUE)"])
+                        subprocess.run(["Rscript", "-e", "utils::install.packages(c('R6', 'Rcpp', 'skimr'), lib='r-learningmachine', dependencies=TRUE)"])
+                        subprocess.run(["Rscript", "-e", "remotes::install_github('Techtonique/learningmachine', lib='r-learningmachine')"])
 
 
 # Check if R is installed; if not, install it
