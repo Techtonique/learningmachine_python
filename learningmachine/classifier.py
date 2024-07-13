@@ -50,37 +50,29 @@ class Classifier(Base, ClassifierMixin):
             seed=seed,
         )
 
-        self.type_prediction_set=type_prediction_set
-
+        self.type_prediction_set=type_prediction_set        
+        
         try: 
-            self.obj = r(f"suppressWarnings(suppressMessages(library(learningmachine))); Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
-        except NotImplementedError:
-            self.obj = r(
+            r_obj_command = (
+    'suppressWarnings(suppressMessages(library(learningmachine))); '
+    'Classifier$new(method = ' + str(format_value(self.method)) + ', '
+    'pi_method = ' + str(format_value(self.pi_method)) + ', '
+    'level = ' + str(format_value(self.level)) + ', '
+    'type_prediction_set = ' + str(format_value(self.type_prediction_set)) + ', '
+    'B = ' + str(format_value(self.B)) + ', '
+    'nb_hidden = ' + str(format_value(self.nb_hidden)) + ', '
+    'nodes_sim = ' + str(format_value(self.nodes_sim)) + ', '
+    'activ = ' + str(format_value(self.activ)) + ', '
+    'seed = ' + str(format_value(self.seed)) + ')')
+            self.obj = r(r_obj_command)
+        except Exception:
+            try:
+                self.obj = r(f"suppressWarnings(suppressMessages(library(learningmachine))); Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
+            except Exception:
+                self.obj = r(
                  f"learningmachine::Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
              )
-
-        # try:            
-        #     self.load_learningmachine()
-        #     self.obj = r(
-        #         f"learningmachine::Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
-        #     )
-        # except NotImplementedError as e:
-        #     try:
-        #         base.suppressWarnings(base.suppressMessages(r.library("learningmachine")))
-        #         self.obj = r(
-        #             f"Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
-        #         )
-        #     except NotImplementedError as e:
-        #         try:
-        #             self.obj = r(
-        #             f"""
-        #                         suppressWarnings(suppressMessages(library(learningmachine))); 
-        #                         Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})
-        #                         """
-        #         )
-        #         except NotImplementedError as e:                    
-        #             print("R package can't be loaded: ", e)
-
+                
     def fit(self, X, y, **kwargs):
         """
         Fit the model according to the given training data.
