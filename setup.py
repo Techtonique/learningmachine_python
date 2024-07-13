@@ -124,10 +124,14 @@ def install_packages():
 
 # Check if R is installed; if not, install it
 if not check_r_installed():
-    print("Installing R...")
-    install_r()
+    install_r_prompt = int(input("Try installing R? 1-yes, 2-no"))
+    if install_r_prompt == 1: 
+        print("Installing R...")
+        install_r()
+    else:
+        raise ValueError('Try installing R manually first.')
 else:
-    print("No installation needed.")
+    print("No R installation needed.")
 
 install_packages()
 
