@@ -49,3 +49,4 @@ for dataset in datasets:
     fit_obj.fit(X_train, y_train, num__trees = 150)
     print("Elapsed time: ", time() - start)
     print(fit_obj.predict(X_test))
+    print(fit_obj.summary(X=X_test, y=y_test, class_index=0))
