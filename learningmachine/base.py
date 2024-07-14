@@ -231,11 +231,11 @@ class Base(BaseEstimator):
                                     ncol=X.shape[1],
                                     nrow=X.shape[0])                                  
             
-        # if self.method in ("ranger", "extratrees"):
-        #     if self.column_names is not None: # fit uses a data frame 
-        #         X_r.colnames = StrVector(self.column_names)
-        #     else: #do not assign column names 
-        #         pass 
+        if self.method in ("ranger", "extratrees"):
+             if self.column_names is not None: # fit uses a data frame 
+                 X_r.colnames = StrVector(self.column_names)
+             else: #do not assign column names 
+                 pass 
         # else: # self.method != "ranger" and != "extratrees"
         #     if column_names is not None: 
         #         if self.column_names is None:  
