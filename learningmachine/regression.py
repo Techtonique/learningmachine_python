@@ -68,8 +68,14 @@ class Regressor(Base, RegressorMixin):
         Fit the model according to the given training data.
         """        
         params_dict = {}
-        for k, v in kwargs.items():
-            params_dict[k.replace('_', '.')] = v
+        if self.method in ("ranger", "glmnet", "svm"):            
+            for k, v in kwargs.items():
+                if k == 'lambda_':
+                    params_dict["lambda"] = v    
+                elif '__' in k: 
+                    params_dict[k.replace('__', '.')] = v
+                else:
+                    params_dict[k] = v 
         self.obj["fit"](
             r.matrix(FloatVector(X.ravel()), 
                        byrow=True,

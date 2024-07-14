@@ -212,36 +212,34 @@ class Base(BaseEstimator):
 
             return scoring_options[scoring](y, preds, **kwargs)
 
-    def summary(self, X, y,                                 
-                class_index = None,   
-                level = 95,
-                show_progress = True,                                             
-                cl = None):
-                
+    def summary(self, X,                 
+                class_index,                                   
+                y = None,                                                 
+                cl = None,
+                show_progress = True):
+        
         if cl is None:
 
             if self.type == "classification":
 
-                assert class_index is not None, "class_index must be provided for classification models"      
+                assert y is not None, "the response 'y' must be provided for classifiers"     
 
-                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
                                                 byrow=True,
                                                 ncol=X.shape[1],
                                                 nrow=X.shape[0]),
                                     y = FactorVector(IntVector(y)),
-                                    class_index = class_index + 1,
-                                    level = level,
+                                    class_index = int(class_index) + 1,
                                     show_progress = show_progress                                                                   
                 )
             
-            else: # regression
+            elif self.type == "regression":
 
-                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
                                                 byrow=True,
                                                 ncol=X.shape[1],
                                                 nrow=X.shape[0]),
                                     y = FloatVector(y),
-                                    level = level,
                                     show_progress = show_progress
                 ) 
         else: # cl is not None, parallel computing
@@ -250,20 +248,21 @@ class Base(BaseEstimator):
 
                 assert class_index is not None, "class_index must be provided for classification models"      
                 
-                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
                                                 byrow=True,
                                                 ncol=X.shape[1],
                                                 nrow=X.shape[0]),
                                     y = FactorVector(IntVector(y)),
+                                    class_name = class_name if class_name is not None else rNULL,
+                                    class_index = class_index + 1 if class_index is not None else rNULL,
                                     level = level,
                                     show_progress = show_progress,
-                                    class_index = class_index + 1,
                                     cl = cl
                 )
             
-            else: # regression
+            elif self.type == "regression":
 
-                self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
+                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
                                                 byrow=True,
                                                 ncol=X.shape[1],
                                                 nrow=X.shape[0]),

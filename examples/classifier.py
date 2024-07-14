@@ -16,11 +16,11 @@ for dataset in datasets:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
                                                         random_state=123)
     
-    fit_obj = lm.Classifier(method = "ranger", 
+    fit_obj = lm.Classifier(method = "krr", 
                             pi_method="none")    
 
     start = time()
-    fit_obj.fit(X_train, y_train, num_trees = 50)
+    fit_obj.fit(X_train, y_train, reg_lambda = 0.05)
     print("Elapsed time: ", time() - start)
 
     print(f"fit_obj.get_params(): {fit_obj.get_params()}")
@@ -28,8 +28,9 @@ for dataset in datasets:
     print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
 
     ## Compute accuracy
-    print(fit_obj.score(X_test, y_test))
-    print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
+    #print(fit_obj.score(X_test, y_test))
+    #print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
+    print(fit_obj.summary(X=X_test, y=y_test, class_index=0))
 
 for dataset in datasets: 
 
@@ -45,9 +46,6 @@ for dataset in datasets:
                             B=100)    
 
     start = time()
-    fit_obj.fit(X_train, y_train, num_trees = 150)
+    fit_obj.fit(X_train, y_train, num__trees = 150)
     print("Elapsed time: ", time() - start)
-    print(f"fit_obj: {fit_obj}")
-    print(f"fit_obj.get_params(): {fit_obj.get_params()}")
-    print(f"fit_obj.predict_proba(X_test): {fit_obj.predict_proba(X_test)}")
-    print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
+    print(fit_obj.predict(X_test))
