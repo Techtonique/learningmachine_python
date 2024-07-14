@@ -1,6 +1,6 @@
 import learningmachine as lm
 import numpy as np
-
+import pandas as pd 
 from sklearn.datasets import load_diabetes, load_wine
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -13,7 +13,7 @@ from math import sqrt
 # 1. Regression
 fit_obj = lm.Regressor(method="ranger")
 diabetes = load_diabetes()
-X = diabetes.data[:150]
+X = pd.DataFrame(diabetes.data[:150], columns=diabetes.feature_names)
 y = diabetes.target[:150]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, 
@@ -32,6 +32,7 @@ rms1 = sqrt(mean_squared_error(y_test, preds))
 print(rms1)
 print(fit_obj.score(X_test, y_test))
 print(-cross_val_score(fit_obj, X, y, cv=5, scoring='neg_root_mean_squared_error'))
+print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
 print(fit_obj.summary(X=X_test, y=y_test))
 
 
@@ -41,5 +42,6 @@ start = time()
 fit_obj2.fit(X_train, y_train, num__trees = 100, mtry = 4)
 print("Elapsed time: ", time() - start)
 print(f"fit_obj.get_params(): {fit_obj2.get_params()}")
-print(f"fit_obj: {fit_obj2}")
+print(f"fit_obj2.predict(X_test).lower: {fit_obj2.predict(X_test).lower}")
+print(f"fit_obj2.predict(X_test).upper: {fit_obj2.predict(X_test).upper}")
 print(fit_obj2.summary(X=X_test, y=y_test))

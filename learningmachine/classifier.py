@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd 
 import sklearn.metrics as skm
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
@@ -6,7 +7,7 @@ from rpy2.robjects.vectors import (
     FloatVector,
     IntVector,
     FactorVector,
-    ListVector
+    StrVector
 )
 from sklearn.base import ClassifierMixin
 from .base import Base
@@ -50,28 +51,25 @@ class Classifier(Base, ClassifierMixin):
             seed=seed,
         )
 
-        self.type_prediction_set=type_prediction_set        
+        self.type_prediction_set=type_prediction_set          
         
         try: 
-            r_obj_command = (
-    'suppressWarnings(suppressMessages(library(learningmachine))); '
-    'Classifier$new(method = ' + str(format_value(self.method)) + ', '
-    'pi_method = ' + str(format_value(self.pi_method)) + ', '
-    'level = ' + str(format_value(self.level)) + ', '
-    'type_prediction_set = ' + str(format_value(self.type_prediction_set)) + ', '
-    'B = ' + str(format_value(self.B)) + ', '
-    'nb_hidden = ' + str(format_value(self.nb_hidden)) + ', '
-    'nodes_sim = ' + str(format_value(self.nodes_sim)) + ', '
-    'activ = ' + str(format_value(self.activ)) + ', '
-    'seed = ' + str(format_value(self.seed)) + ')')
+            r_obj_command = 'suppressWarnings(suppressMessages(library(learningmachine))); ' +\
+            'Classifier$new(method = ' + str(format_value(self.method)) + ', ' +\
+            'pi_method = ' + str(format_value(self.pi_method)) + ', ' +\
+            'level = ' + str(format_value(self.level)) + ', ' +\
+            'type_prediction_set = ' + str(format_value(self.type_prediction_set)) + ', ' +\
+            'B = ' + str(format_value(self.B)) + ', ' +\
+            'nb_hidden = ' + str(format_value(self.nb_hidden)) + ', ' +\
+            'nodes_sim = ' + str(format_value(self.nodes_sim)) + ', ' +\
+            'activ = ' + str(format_value(self.activ)) + ', ' +\
+            'seed = ' + str(format_value(self.seed)) + ')'            
             self.obj = r(r_obj_command)
         except Exception:
             try:
                 self.obj = r(f"suppressWarnings(suppressMessages(library(learningmachine))); Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
             except Exception:
-                self.obj = r(
-                 f"learningmachine::Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
-             )
+                self.obj = r(f"learningmachine::Classifier$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, type_prediction_set = {format_value(self.type_prediction_set)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
                 
     def fit(self, X, y, **kwargs):
         """
@@ -86,10 +84,18 @@ class Classifier(Base, ClassifierMixin):
                     params_dict[k.replace('__', '.')] = v
                 else:
                     params_dict[k] = v 
-        self.obj["fit"](r.matrix(FloatVector(X.ravel()), 
+        if isinstance(X, pd.DataFrame):
+            self.column_names = X.columns
+            X = X.values            
+        if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
+            y = y.values.ravel()
+        X_r = r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
-                       nrow=X.shape[0]),
+                       nrow=X.shape[0])
+        if self.column_names is not None: # fit uses a data frame                                                                 
+            X_r.colnames = StrVector(self.column_names)
+        self.obj["fit"](X_r,
             FactorVector(IntVector(y)),
             **params_dict)
         self.classes_ = np.unique(y)  # /!\ do not remove
@@ -99,40 +105,49 @@ class Classifier(Base, ClassifierMixin):
         """
         Predict using the model.
         """    
-        if self.pi_method == "none":               
-            res = self.obj["predict_proba"](
-                    r.matrix(FloatVector(X.ravel()), 
-                byrow=True,
-                ncol=X.shape[1],
-                nrow=X.shape[0])
-                )
-            return np.asarray(res)        
-        return r_list_to_namedtuple(self.obj["predict_proba"](
-                    r.matrix(FloatVector(X.ravel()), 
-                byrow=True,
-                ncol=X.shape[1],
-                nrow=X.shape[0])
-                ))
+
+        if isinstance(X, pd.DataFrame): 
+            X_r = r.matrix(FloatVector(X.values.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+        else: 
+            X_r = r.matrix(FloatVector(X.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+            
+        if self.pi_method == "none": 
+            if isinstance(X, pd.DataFrame):                   
+                res = self.obj["predict_proba"](X_r)
+            return np.asarray(res)   
+        if isinstance(X, pd.DataFrame):                        
+            return r_list_to_namedtuple(self.obj["predict_proba"](X_r))
 
     def predict(self, X):
         """
         Predict using the model.
         """    
-        if self.pi_method == "none":               
+
+        if isinstance(X, pd.DataFrame): 
+            X_r = r.matrix(FloatVector(X.values.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+        else: 
+            X_r = r.matrix(FloatVector(X.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+            
+        if self.pi_method == "none":                            
             return (
-            np.asarray(
-                self.obj["predict"](
-                    r.matrix(FloatVector(X.ravel()), 
-                byrow=True,
-                ncol=X.shape[1],
-                nrow=X.shape[0])
-                )
-            ) - 1 
-        )
-        return r_list_to_namedtuple(self.obj["predict"](
-                    r.matrix(FloatVector(X.ravel()), 
-                byrow=True,
-                ncol=X.shape[1],
-                nrow=X.shape[0])
-                ))            
+                np.asarray(
+                    self.obj["predict"](
+                        X_r
+                    )
+                ) - 1 
+            )
+                   
+        return r_list_to_namedtuple(self.obj["predict"](X_r))        
         

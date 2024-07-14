@@ -1,10 +1,11 @@
+import pandas as pd 
 import sklearn.metrics as skm
 import subprocess
 from functools import lru_cache
 from sklearn.base import BaseEstimator
 from rpy2.robjects.vectors import (
     StrVector,
-    FloatMatrix,
+    ListVector,
     FloatVector,
     IntVector,
     FactorVector,
@@ -58,6 +59,7 @@ class Base(BaseEstimator):
         self.params = params
         self.seed = seed
         self.obj = None
+        self.column_names = None
 
     def load_learningmachine(self):
         # Install R packages
@@ -212,64 +214,58 @@ class Base(BaseEstimator):
 
             return scoring_options[scoring](y, preds, **kwargs)
 
-    def summary(self, X,                 
-                class_index = None,                                   
-                y = None,                                                 
+    def summary(self, X, y,                
+                class_index = None,                                                                                                    
                 cl = None,
-                show_progress = True):
+                show_progress = True, 
+                column_names = None):
         
+        if isinstance(X, pd.DataFrame): 
+            X_r = r.matrix(FloatVector(X.values.ravel()), 
+                                        byrow=True,
+                                        ncol=X.shape[1],
+                                        nrow=X.shape[0])  
+        else:
+            X_r = r.matrix(FloatVector(X.ravel()), 
+                                    byrow=True,
+                                    ncol=X.shape[1],
+                                    nrow=X.shape[0])                                  
+            
+        if self.method in ("ranger", "extratrees"):
+            if self.column_names is not None: # fit uses a data frame 
+                X_r.colnames = StrVector(self.column_names)
+            else: #do not assign column names 
+                pass 
+        else: # self.method != "ranger" and != "extratrees"
+            if column_names is not None: 
+                if self.column_names is None:  
+                    self.column_names = column_names
+                    X_r.colnames = StrVector(column_names)
+                else: # self.column_names is not None
+                    assert column_names == self.column_names,\
+                            "must have column_names == self.column_names"
+                    X_r.colnames = StrVector(self.column_names)
+                
         if cl is None:
 
             if self.type == "classification":
 
                 assert class_index is not None, "For classifiers, 'class_index' must be provided"
 
-                assert y is not None, "the response 'y' must be provided for classifiers"     
-
-                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
-                                                byrow=True,
-                                                ncol=X.shape[1],
-                                                nrow=X.shape[0]),
+                return self.obj["summary"](X = X_r,
                                     y = FactorVector(IntVector(y)),
                                     class_index = int(class_index) + 1,
                                     show_progress = show_progress                                                                   
                 )
             
             elif self.type == "regression":
-
-                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
-                                                byrow=True,
-                                                ncol=X.shape[1],
-                                                nrow=X.shape[0]),
+                
+                return self.obj["summary"](X = X_r,
                                     y = FloatVector(y),
                                     show_progress = show_progress
-                ) 
+                )
+             
         else: # cl is not None, parallel computing
 
-            if self.type == "classification":
+            pass 
 
-                assert class_index is not None, "class_index must be provided for classification models"      
-                
-                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
-                                                byrow=True,
-                                                ncol=X.shape[1],
-                                                nrow=X.shape[0]),
-                                    y = FactorVector(IntVector(y)),
-                                    class_name = class_name if class_name is not None else rNULL,
-                                    class_index = class_index + 1 if class_index is not None else rNULL,
-                                    level = level,
-                                    show_progress = show_progress,
-                                    cl = cl
-                )
-            
-            elif self.type == "regression":
-
-                return self.obj["summary"](X = r.matrix(FloatVector(X.ravel()), 
-                                                byrow=True,
-                                                ncol=X.shape[1],
-                                                nrow=X.shape[0]),
-                                    y = FloatVector(y),
-                                    level = level,
-                                    show_progress = show_progress,
-                                    cl = cl
-                )

@@ -28,9 +28,9 @@ for dataset in datasets:
     print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
 
     ## Compute accuracy
-    #print(fit_obj.score(X_test, y_test))
-    #print(cross_val_score(fit_obj, X, y, cv=5, scoring='accuracy'))
-    print(fit_obj.summary(X=X_test, y=y_test, class_index=0))
+    print(fit_obj.summary(X=X_test, y=y_test, 
+                          column_names=dataset.feature_names, 
+                          class_index=0))
 
 for dataset in datasets: 
 
@@ -49,4 +49,7 @@ for dataset in datasets:
     fit_obj.fit(X_train, y_train, num__trees = 150)
     print("Elapsed time: ", time() - start)
     print(fit_obj.predict(X_test))
-    print(fit_obj.summary(X=X_test, y=y_test, class_index=0))
+    print(dataset.feature_names)
+    print(fit_obj.summary(X=X_test, y=y_test, 
+                          column_names=dataset.feature_names, 
+                          class_index=0))

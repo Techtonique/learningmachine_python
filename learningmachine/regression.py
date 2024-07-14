@@ -1,7 +1,8 @@
 import numpy as np
+import pandas as pd 
 from rpy2.robjects import r
 from rpy2.robjects.packages import importr
-from rpy2.robjects.vectors import FloatVector, ListVector
+from rpy2.robjects.vectors import FloatVector, StrVector
 from sklearn.base import RegressorMixin
 from .base import Base
 from .utils import format_value, r_list_to_namedtuple
@@ -44,24 +45,21 @@ class Regressor(Base, RegressorMixin):
         )
         
         try: 
-            r_obj_command = (
-    'suppressWarnings(suppressMessages(library(learningmachine))); '
-    'Regressor$new(method = ' + str(format_value(self.method)) + ', '
-    'pi_method = ' + str(format_value(self.pi_method)) + ', '
-    'level = ' + str(format_value(self.level)) + ', '
-    'B = ' + str(format_value(self.B)) + ', '
-    'nb_hidden = ' + str(format_value(self.nb_hidden)) + ', '
-    'nodes_sim = ' + str(format_value(self.nodes_sim)) + ', '
-    'activ = ' + str(format_value(self.activ)) + ', '
-    'seed = ' + str(format_value(self.seed)) + ')')
+            r_obj_command = 'suppressWarnings(suppressMessages(library(learningmachine))); ' +\
+            'Regressor$new(method = ' + str(format_value(self.method)) + ', ' +\
+            'pi_method = ' + str(format_value(self.pi_method)) + ', ' +\
+            'level = ' + str(format_value(self.level)) + ', ' +\
+            'B = ' + str(format_value(self.B)) + ', ' +\
+            'nb_hidden = ' + str(format_value(self.nb_hidden)) + ', ' +\
+            'nodes_sim = ' + str(format_value(self.nodes_sim)) + ', ' +\
+            'activ = ' + str(format_value(self.activ)) + ', ' +\
+            'seed = ' + str(format_value(self.seed)) + ')'
             self.obj = r(r_obj_command)
         except Exception: 
             try:                 
                 self.obj = r(f"suppressWarnings(suppressMessages(library(learningmachine))); Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
             except Exception: 
-                self.obj = r(
-                    f"learningmachine::Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})"
-                )
+                self.obj = r(f"learningmachine::Regressor$new(method = {format_value(self.method)}, pi_method = {format_value(self.pi_method)}, level = {format_value(self.level)}, B = {format_value(self.B)}, nb_hidden = {format_value(self.nb_hidden)}, nodes_sim = {format_value(self.nodes_sim)}, activ = {format_value(self.activ)}, seed = {format_value(self.seed)})")
         
     def fit(self, X, y, **kwargs):
         """
@@ -76,11 +74,18 @@ class Regressor(Base, RegressorMixin):
                     params_dict[k.replace('__', '.')] = v
                 else:
                     params_dict[k] = v 
-        self.obj["fit"](
-            r.matrix(FloatVector(X.ravel()), 
+        if isinstance(X, pd.DataFrame):
+            self.column_names = X.columns
+            X = X.values            
+        if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
+            y = y.values.ravel()            
+        X_r = r.matrix(FloatVector(X.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
-                       nrow=X.shape[0]),
+                       nrow=X.shape[0])
+        if self.column_names is not None: # fit uses a data frame                                                                 
+            X_r.colnames = StrVector(self.column_names)
+        self.obj["fit"](X_r,
             FloatVector(y), 
             **params_dict            
         )
@@ -90,17 +95,29 @@ class Regressor(Base, RegressorMixin):
         """
         Predict using the model.
         """
-        if self.pi_method == "none":
-            return(np.asarray(self.obj["predict"](
-                r.matrix(FloatVector(X.ravel()), 
-                       byrow=True,
-                       ncol=X.shape[1],
-                       nrow=X.shape[0])
-            )))
+
+        if isinstance(X, pd.DataFrame): 
+            X_r = r.matrix(FloatVector(X.values.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+        else: 
+            X_r = r.matrix(FloatVector(X.ravel()), 
+                            byrow=True,
+                            ncol=X.shape[1],
+                            nrow=X.shape[0])
+            
+        if self.method in ("ranger", "extratrees"):
+            if self.column_names is not None: # fit uses a data frame 
+                X_r.colnames = StrVector(self.column_names)
+            else: #do not assign column names 
+                pass 
+
+        if self.pi_method == "none":            
+                return(np.asarray(self.obj["predict"](
+                    X_r 
+                )))
         return r_list_to_namedtuple(self.obj["predict"](
-                r.matrix(FloatVector(X.ravel()), 
-                       byrow=True,
-                       ncol=X.shape[1],
-                       nrow=X.shape[0])
-            ))
+                    X_r
+                ))
         
