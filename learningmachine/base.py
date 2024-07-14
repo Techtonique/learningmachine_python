@@ -213,7 +213,7 @@ class Base(BaseEstimator):
             return scoring_options[scoring](y, preds, **kwargs)
 
     def summary(self, X,                 
-                class_index,                                   
+                class_index = None,                                   
                 y = None,                                                 
                 cl = None,
                 show_progress = True):
@@ -221,6 +221,8 @@ class Base(BaseEstimator):
         if cl is None:
 
             if self.type == "classification":
+
+                assert class_index is not None, "For classifiers, 'class_index' must be provided"
 
                 assert y is not None, "the response 'y' must be provided for classifiers"     
 
