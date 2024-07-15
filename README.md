@@ -15,12 +15,6 @@ If R packages are not installed automatically when running `pip`, [install it ma
 !pip install git+https://github.com/Techtonique/learningmachine_python.git --verbose 
 ```
 
-**Stable version**
-
-```bash
-!pip install learningmachine --verbose
-```
-
 ## Example
 
 See also:
