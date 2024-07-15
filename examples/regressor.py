@@ -9,6 +9,7 @@ from time import time
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
+print("\n ----- fitting ranger ----- \n")   
 
 # 1. Regression
 fit_obj = lm.Regressor(method="ranger")
@@ -35,12 +36,15 @@ print(-cross_val_score(fit_obj, X, y, cv=5, scoring='neg_root_mean_squared_error
 print(f"fit_obj.predict(X_test): {fit_obj.predict(X_test)}")
 print(fit_obj.summary(X=X_test, y=y_test))
 
+print("\n ----- fitting krr ----- \n")   
+
 fit_obj2 = lm.Regressor(method="krr", pi_method="none")
 start = time()
 fit_obj2.fit(X_train, y_train, lambda_=0.05)
 print("Elapsed time: ", time() - start)
 print(fit_obj2.summary(X=X_test, y=y_test))
 
+print("\n ----- fitting extratrees ----- \n")   
 
 X, y = fetch_california_housing(return_X_y=True, as_frame=True)
 #features = ["MedInc", "AveOccup", "HouseAge", "AveRooms"]

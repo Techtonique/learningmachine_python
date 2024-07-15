@@ -76,25 +76,31 @@ class Classifier(Base, ClassifierMixin):
         Fit the model according to the given training data.
         """
         params_dict = {}
-        if self.method in ("ranger", "glmnet", "svm"):
-            for k, v in kwargs.items():
-                if k == 'lambda_':
-                    params_dict["lambda"] = v    
-                elif '__' in k: 
-                    params_dict[k.replace('__', '.')] = v
-                else:
-                    params_dict[k] = v 
+
+        for k, v in kwargs.items():
+            if k == 'lambda_':
+                params_dict["lambda"] = v    
+            elif '__' in k: 
+                params_dict[k.replace('__', '.')] = v
+            else:
+                params_dict[k] = v 
+
         if isinstance(X, pd.DataFrame):
             self.column_names = X.columns
-            X = X.values            
-        if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
-            y = y.values.ravel()
-        X_r = r.matrix(FloatVector(X.ravel()), 
+            X_r = r.matrix(FloatVector(X.values.ravel()), 
                        byrow=True,
                        ncol=X.shape[1],
                        nrow=X.shape[0])
-        if self.column_names is not None: # fit uses a data frame                                                                 
             X_r.colnames = StrVector(self.column_names)
+        else:
+            X_r = r.matrix(FloatVector(X.ravel()), 
+                       byrow=True,
+                       ncol=X.shape[1],
+                       nrow=X.shape[0])
+        
+        if isinstance(y, pd.DataFrame) or isinstance(y, pd.Series):
+            y = y.values.ravel()                    
+
         self.obj["fit"](X_r,
             FactorVector(IntVector(y)),
             **params_dict)
@@ -111,12 +117,13 @@ class Classifier(Base, ClassifierMixin):
                             byrow=True,
                             ncol=X.shape[1],
                             nrow=X.shape[0])
+            X_r.colnames = StrVector(self.column_names)
         else: 
             X_r = r.matrix(FloatVector(X.ravel()), 
                             byrow=True,
                             ncol=X.shape[1],
                             nrow=X.shape[0])
-            
+                    
         if self.pi_method == "none": 
             if isinstance(X, pd.DataFrame):                   
                 res = self.obj["predict_proba"](X_r)
@@ -134,6 +141,7 @@ class Classifier(Base, ClassifierMixin):
                             byrow=True,
                             ncol=X.shape[1],
                             nrow=X.shape[0])
+            X_r.colnames = StrVector(self.column_names)
         else: 
             X_r = r.matrix(FloatVector(X.ravel()), 
                             byrow=True,
