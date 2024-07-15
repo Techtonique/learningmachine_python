@@ -51,5 +51,4 @@ for dataset in datasets:
     print(fit_obj.predict(X_test))
     print(dataset.feature_names)
     print(fit_obj.summary(X=X_test, y=y_test, 
-                          column_names=dataset.feature_names, 
                           class_index=0))
