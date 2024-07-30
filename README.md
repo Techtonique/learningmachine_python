@@ -7,7 +7,7 @@ Machine Learning with uncertainty quantification and interpretability.
 
 ## Install
 
-If R packages are not installed automatically when running `pip`, [install it manually](https://cloud.r-project.org/).
+If R packages are not installed automatically when running `pip`, [install them manually](https://cloud.r-project.org/).
 
 **Development version**
 
