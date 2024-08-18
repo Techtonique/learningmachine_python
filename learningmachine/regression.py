@@ -122,3 +122,16 @@ class Regressor(Base, RegressorMixin):
                     X_r
                 ))
         
+    def update(self, newx, newy):
+        """
+        update the model.
+        """
+
+        newx_r = base.as_vector(FloatVector(newx))                           
+
+        self.obj["update"](newx_r,
+            base.as_numeric(FloatVector([newy]))
+        )
+                    
+        return self
+        
