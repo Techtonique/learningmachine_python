@@ -1,4 +1,4 @@
-import pandas as pd 
+import pandas as pd
 import sklearn.metrics as skm
 import subprocess
 from functools import lru_cache
@@ -32,9 +32,9 @@ class Base(BaseEstimator):
         pi_method="kdesplitconformal",
         level=95,
         B=100,
-        nb_hidden = 0,
-        nodes_sim = "sobol",
-        activ = "relu",
+        nb_hidden=0,
+        nodes_sim="sobol",
+        activ="relu",
         params=None,
         seed=123,
     ):
@@ -47,15 +47,23 @@ class Base(BaseEstimator):
         self.method = method
         self.pi_method = pi_method
         self.level = level
-        self.B = B        
+        self.B = B
         self.nb_hidden = nb_hidden
-        assert nodes_sim in ("sobol", "halton", "unif"), \
-            "must have nodes_sim in ('sobol', 'halton', 'unif')"
+        assert nodes_sim in (
+            "sobol",
+            "halton",
+            "unif",
+        ), "must have nodes_sim in ('sobol', 'halton', 'unif')"
         self.nodes_sim = "sobol"
-        assert activ in ("relu", "sigmoid", "tanh",
-                             "leakyrelu", "elu", "linear"), \
-                            "must have activ in ('relu', 'sigmoid', 'tanh', 'leakyrelu', 'elu', 'linear')"
-        self.activ = activ 
+        assert activ in (
+            "relu",
+            "sigmoid",
+            "tanh",
+            "leakyrelu",
+            "elu",
+            "linear",
+        ), "must have activ in ('relu', 'sigmoid', 'tanh', 'leakyrelu', 'elu', 'linear')"
+        self.activ = activ
         self.params = params
         self.seed = seed
         self.obj = None
@@ -63,8 +71,10 @@ class Base(BaseEstimator):
 
     def load_learningmachine(self):
         # Install R packages
-        commands1_lm = 'base::system.file(package = "learningmachine")'  # check "learningmachine" is installed
-        commands2_lm = 'base::system.file("learningmachine_r", package = "learningmachine")'  # check "learningmachine" is installed locally
+        # check "learningmachine" is installed
+        commands1_lm = 'base::system.file(package = "learningmachine")'
+        # check "learningmachine" is installed locally
+        commands2_lm = 'base::system.file("learningmachine_r", package = "learningmachine")'
         exec_commands1_lm = subprocess.run(
             ["Rscript", "-e", commands1_lm], capture_output=True, text=True
         )
@@ -102,7 +112,9 @@ class Base(BaseEstimator):
                     )
                 except:  # well, we tried
                     try:
-                        r("try(suppressWarnings(suppressMessages(library('learningmachine'))), silence=TRUE)")
+                        r(
+                            "try(suppressWarnings(suppressMessages(library('learningmachine'))), silence=TRUE)"
+                        )
                     except:  # well, we tried everything at this point
                         r(
                             "try(suppressWarnings(suppressMessages(library('learningmachine', lib.loc='learningmachine_r'))), silence=TRUE)"
@@ -214,43 +226,57 @@ class Base(BaseEstimator):
 
             return scoring_options[scoring](y, preds, **kwargs)
 
-    def summary(self, X, y,                
-                class_index = None,                                                                                                    
-                cl = None,
-                show_progress = True):
-        
-        if isinstance(X, pd.DataFrame): 
-            X_r = r.matrix(FloatVector(X.values.ravel()), 
-                                        byrow=True,
-                                        ncol=X.shape[1],
-                                        nrow=X.shape[0])  
+    def summary(
+        self,
+        X,
+        y,
+        class_index=None,
+        cl=None,
+        type_ci="student",
+        show_progress=True,
+    ):
+
+        if isinstance(X, pd.DataFrame):
+            X_r = r.matrix(
+                FloatVector(X.values.ravel()),
+                byrow=True,
+                ncol=X.shape[1],
+                nrow=X.shape[0],
+            )
             X_r.colnames = StrVector(self.column_names)
         else:
-            X_r = r.matrix(FloatVector(X.ravel()), 
-                                    byrow=True,
-                                    ncol=X.shape[1],
-                                    nrow=X.shape[0])   
-                
+            X_r = r.matrix(
+                FloatVector(X.ravel()),
+                byrow=True,
+                ncol=X.shape[1],
+                nrow=X.shape[0],
+            )
+
         if cl is None:
 
             if self.type == "classification":
 
-                assert class_index is not None, "For classifiers, 'class_index' must be provided"
+                assert (
+                    class_index is not None
+                ), "For classifiers, 'class_index' must be provided"
 
-                return self.obj["summary"](X = X_r,
-                                    y = FactorVector(IntVector(y)),
-                                    class_index = int(class_index) + 1,
-                                    show_progress = show_progress                                                                   
+                return self.obj["summary"](
+                    X=X_r,
+                    y=FactorVector(IntVector(y)),
+                    class_index=int(class_index) + 1,
+                    type_ci=StrVector([type_ci]),
+                    show_progress=show_progress,
                 )
-            
+
             elif self.type == "regression":
-                
-                return self.obj["summary"](X = X_r,
-                                    y = FloatVector(y),
-                                    show_progress = show_progress
+
+                return self.obj["summary"](
+                    X=X_r,
+                    y=FloatVector(y),
+                    type_ci=StrVector([type_ci]),
+                    show_progress=show_progress,
                 )
-             
-        else: # cl is not None, parallel computing
 
-            pass 
+        else:  # cl is not None, parallel computing
 
+            pass
