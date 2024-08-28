@@ -145,13 +145,23 @@ class Regressor(Base, RegressorMixin):
             return np.asarray(self.obj["predict"](X_r))
         return r_list_to_namedtuple(self.obj["predict"](X_r))
 
-    def update(self, newx, newy):
+    def update(self, newx, newy, **kwargs):
         """
         update the model.
         """
+        params_dict = {}
+
+        for k, v in kwargs.items():
+            if k == "lambda_":
+                params_dict["lambda"] = v
+            elif "__" in k:
+                params_dict[k.replace("__", ".")] = v
+            else:
+                params_dict[k] = v
 
         newx_r = base.as_vector(FloatVector(newx))
 
-        self.obj["update"](newx_r, base.as_numeric(FloatVector([newy])))
+        self.obj["update"](newx_r, base.as_numeric(FloatVector([newy])), 
+                           **params_dict)
 
         return self
