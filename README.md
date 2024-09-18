@@ -1,6 +1,6 @@
 # learningmachine 
 
-![PyPI](https://img.shields.io/pypi/v/learningmachine) [![PyPI - License](https://img.shields.io/pypi/l/learningmachine)](https://github.com/thierrymoudiki/learningmachine/blob/master/LICENSE) [![Downloads](https://pepy.tech/badge/learningmachine)](https://pepy.tech/project/learningmachine) [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/learningmachine/)
+![PyPI](https://img.shields.io/pypi/v/learningmachine) [![PyPI - License](https://img.shields.io/pypi/l/learningmachine)](https://github.com/thierrymoudiki/learningmachine/blob/master/LICENSE) [![Downloads](https://pepy.tech/badge/learningmachine)](https://pepy.tech/project/learningmachine) [![Documentation](https://img.shields.io/badge/documentation-is_here-green)](https://techtonique.github.io/learningmachine_python/)
 
 
 Machine Learning with uncertainty quantification and interpretability.
