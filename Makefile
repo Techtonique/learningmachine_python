@@ -58,6 +58,7 @@ docs: install ## generate docs
 	pip install black pdoc 
 	black learningmachine/* --line-length=80	
 	find learningmachine/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
+	export PDOC_ALLOW_EXEC=1; \
 	pdoc -t docs learningmachine/* --output-dir learningmachine-docs
 	find . -name '__pycache__' -exec rm -fr {} +
 
@@ -65,6 +66,7 @@ servedocs: install ## compile the docs watching for change
 	pip install black pdoc 
 	black learningmachine/* --line-length=80	
 	find learningmachine/ -name "*.py" -exec autopep8 --max-line-length=80 --in-place {} +
+	export PDOC_ALLOW_EXEC=1; \
 	pdoc -t docs learningmachine/* 
 	find . -name '__pycache__' -exec rm -fr {} +
 
@@ -82,8 +84,8 @@ install: clean ## install the package to the active Python's site-packages
 	##python3 -m black learningmachine --line-length 80
 	python3 -m pip install .
 
-build-site: docs ## export mkdocs website to a folder		
-	cp -rf learningmachine-docs/* ../../Pro_Website/Techtonique.github.io/learningmachine
+build-site: docs ## export docs website to a folder		
+	cp -rf learningmachine-docs/* ../../Pro_Website/Techtonique.github.io/learningmachine_python
 	find . -name '__pycache__' -exec rm -fr {} +
 
 run-examples: ## run all examples with one command

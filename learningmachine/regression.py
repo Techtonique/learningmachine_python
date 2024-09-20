@@ -161,7 +161,8 @@ class Regressor(Base, RegressorMixin):
 
         newx_r = base.as_vector(FloatVector(newx))
 
-        self.obj["update"](newx_r, base.as_numeric(FloatVector([newy])), 
-                           **params_dict)
+        self.obj["update"](
+            newx_r, base.as_numeric(FloatVector([newy])), **params_dict
+        )
 
         return self

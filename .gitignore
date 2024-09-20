@@ -64,6 +64,8 @@ instance/
 .scrapy
 
 # Sphinx documentation
+docs/
+learningmachine-docs/
 docs/_build/
 
 # PyBuilder
