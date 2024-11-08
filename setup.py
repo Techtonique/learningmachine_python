@@ -169,6 +169,6 @@ setup(
     packages=find_packages(include=["learningmachine", "learningmachine.*"]),
     test_suite="tests",
     url="https://github.com/Techtonique/learningmachine_python",
-    version="2.6.0",
+    version="2.7.0",
     zip_safe=False,
 )
